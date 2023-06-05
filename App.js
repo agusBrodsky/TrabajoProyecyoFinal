@@ -1,14 +1,12 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-
+import React from 'react';
+import { Text, TouchableNativeFeedback, View,Alert,StyleSheet } from 'react-native';
+import NoUsopaginaLogin from './src/screens/NoUsopaginaLogin.jsx';
+import Login from './src/screens/Login.jsx';
+import Home from './src/screens/Home.jsx';
+import Formulario from './src/screens/Formulario.jsx';
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+  return <Formulario />;
+};
 
 const styles = StyleSheet.create({
   container: {
