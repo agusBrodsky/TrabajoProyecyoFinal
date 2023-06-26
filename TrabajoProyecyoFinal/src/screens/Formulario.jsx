@@ -20,8 +20,9 @@ const Formulario = () => {
   useEffect(() => {
     axios.get('http://localhost:3000/Pregunta') // No esta probado!
       .then((res) => {
-        const arrayPreguntas = res.data.data;
+        const arrayPreguntas = res.data;
         setPreguntas(arrayPreguntas);
+
       });
   }, []); // Este UseEffect solo se utiliza al correr el programa!
 
