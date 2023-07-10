@@ -37,7 +37,9 @@ const styles = StyleSheet.create({
     height: 40,
   },
   tamañoLetra: {
-    fontSize: 23,
+    fontSize: 15,
+    fontWeight: 'bold',
+    textAlign: 'left',
   },
 });
 

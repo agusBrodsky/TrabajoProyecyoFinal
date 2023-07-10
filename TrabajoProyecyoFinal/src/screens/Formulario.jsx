@@ -84,10 +84,13 @@ const Formulario = () => {
       navigation.navigate("Home");
     }
   };
-
+  const cambiarPagina = () =>{
+    navigation.navigate("Login");
+  }
   return (
     <View style={styles.container}>
       <Text style={styles.titulo}>{tituloForm}</Text>
+      <Button title="aca luki" onPress={cambiarPagina}></Button>
       <ScrollView contentContainerStyle={styles.scrollViewContainer}>
         {preguntas.map((pregunta) => (
           <View key={pregunta.Id} style={styles.preguntaContainer}>
