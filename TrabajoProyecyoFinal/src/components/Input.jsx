@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 
-const Input = ({ placeholder, pass = false, onChange }) => {
+const Input = ({ id,placeholder, pass = false, onChange }) => {
   const [inputValue, setInputValue] = useState('');
 
   const ocultarPass = (text) => {
@@ -10,7 +10,7 @@ const Input = ({ placeholder, pass = false, onChange }) => {
     } else {
       setInputValue(text);
     }
-    onChange(text); // Llama a la función onChange del componente padre
+    onChange(text,id); // Llama a la función onChange del componente padre
   };
 
   return (

@@ -7,15 +7,42 @@ import axios from 'axios';
 
 const Formulario = () => {
   const navigation = useNavigation();
-  const [segundaPregunta, setSegundaPregunta] = useState({});
+  const [segundaPregunta, setSegundaPregunta] = useState({}); // ARRAY RESPUESTAS
   const [preguntas, setPreguntas] = useState([]); // ARRAY DE PREGUNTAS INICIALES
   const [pesatañaForm, setPaginaForm] = useState(1);
   const [tituloForm, setTituloForm] = useState("EVALUACIÓN MOTORA");
   const [arrayRespuestas, setArrayRespuestas] = useState([]); // ARRAY DE RESPUESTAS!!
   const [valorInput, setInput] = useState("");
-  const handleInputChange = (value) => { // FUNCION QUE GUARDA VALOR DEL INPUT
-    setInput(value); 
+  let idViejo;
+  const handleInputChange = (value,id_r) => { // FUNCION QUE GUARDA VALOR DEL INPUT
+    console.log(id_r);
+    setInput(value);
+    let pos = -1, i = 0; 
+
+    while (pos === -1 && i < arrayRespuestas.length) { // FIJARSE ESTA MIERDA
+      if (arrayRespuestas[i].id === id_r) {
+        pos = i;
+        //setArrayRespuestas([i].Texto = value);
+        // setArrayRespuestas((prevRespuestas) => ({
+           
+        // }));
+      }
+      else i++;
+    }
+    actualizarTexto(pos, value); // ARREGLAR ESTA MIERDA
+    console.log(arrayRespuestas);
   };
+
+  function actualizarTexto(id, value) { // NO ANDAAA!!!!
+    const actualizado = arrayRespuestas.map(resp => {
+      if (resp.id === id) {
+        return { ...resp, Texto: value };
+      }
+      return resp;
+    });
+    setArrayRespuestas(actualizado);
+  }
+
 
   useEffect(() => { // SE CORRE CUANDO ARRANCA Y GUARDA EN UN ESTADO TODAS LAS PREGUNTAS
     axios.get('http://localhost:3000/Pregunta') 
@@ -23,44 +50,57 @@ const Formulario = () => {
         const arrayPreguntas = res.data;
         setPreguntas(arrayPreguntas);
       });
+      
   }, []);
 
-  const onPressSi = (id, pregunta) => { 
-    setSegundaPregunta((prevPreguntas) => ({
-      ...prevPreguntas,
-      [id]: true,
-    }));
 
+    const onPressSi = (id, pregunta) => { 
+      setSegundaPregunta((prevPreguntas) => ({
+        ...prevPreguntas,
+        [id]: true,
+    }));
+  
     const nuevaRespuesta = { // NUEVA PREGUNTA
       Id: id,
       TextoPregunta: pregunta,
       Opcion: null,
       Texto: valorInput,
       IdParteCuerpo: null,
-      Orden: pesatañaForm,
+      Orden: pesatañaForm, // esto hay que actualizarlo, es el orden de pregunta != a id!!!
     };
-
     setArrayRespuestas((prevRespuestas) => [...prevRespuestas, nuevaRespuesta]);
-  };
-
+  }
+  
   const onPressNo = (id, pregunta) => {
     setSegundaPregunta((prevPreguntas) => ({
       ...prevPreguntas,
       [id]: false,
     }));
-
+    console.log(id);
+   // if(idViejo != id){
     const nuevaRespuesta = { // NUEVA PREGUNTA
       Id: id,
       TextoPregunta: pregunta,
       Opcion: null,
-      Texto: valorInput,
+      Texto: null,
       IdParteCuerpo: null,
       Orden: pesatañaForm,
     };
+   // }
+    //else{
+      console.log("nooo, estas actualizando!!! jajaajaj");
+      let pepe = preguntas.length -1;
+      console.log(pepe);
+      console.log(preguntas[pepe]);
+      let preguntaParaActualizar  = preguntas;
+      setPreguntas((prevPreguntas) => ({
+
+      }))
+    //}
 
     setArrayRespuestas((prevRespuestas) => [...prevRespuestas, nuevaRespuesta]);
   };
-
+// --------------------------------
   const continuarForm = () => {
 
     console.log(arrayRespuestas);
@@ -98,7 +138,7 @@ const Formulario = () => {
             </View>
             {segundaPregunta[pregunta.Id] && (
               <View style={styles.inputContainer}>
-                <Input placeholder={pregunta.preguntaHabilitada} onChange={handleInputChange} />
+                <Input id={pregunta.Id} placeholder={pregunta.preguntaHabilitada} onChange={handleInputChange} />
               </View>
             )}
           </View>
