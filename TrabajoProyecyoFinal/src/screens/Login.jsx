@@ -3,16 +3,20 @@ import { Text, View, StyleSheet, ImageBackground, Image, Dimensions, Button, Ale
 import Logo from '../../assets/logo.png';
 import ImLogin from '../../assets/imLogin.png';
 import Input from '../components/Input';
-
+import { useNavigation } from '@react-navigation/native';
 const windowsHeight = Dimensions.get('window').height;
 const windowsWidth = Dimensions.get('window').width;
 const height = (windowsHeight / 10) * 1.2;
+const navigation = useNavigation();
+
 
 const Login = () => {
   const funcionIniciarSesion = (props) => {
     Alert.alert(props);
   }
-
+const navegarSiguiente = () =>{
+  navigation.navigate("Register");
+}
   return (
     <View style={styles.container}>
       <ImageBackground source={ImLogin} resizeMode="cover" style={styles.imagenFondo}>
@@ -28,7 +32,7 @@ const Login = () => {
           />
         </View>
         <View style={styles.textoRegister}>
-          <text>¿No tienes cuenta?</text>
+          <text onClick={navegarSiguiente()}>¿No tienes cuenta?</text>
           <text>Registrate</text>
         </View>
       </ImageBackground>
