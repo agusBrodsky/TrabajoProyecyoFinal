@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#121885",
     borderRadius: 40,
     width: '50%',
-    marginTop: '115%',
+    marginTop: '114%',
   }
 });
 
