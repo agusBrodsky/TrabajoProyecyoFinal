@@ -7,6 +7,7 @@ import Formulario from './src/screens/Formulario';
 import Login from './src/screens/Login';
 import Home from './src/screens/Home';
 import Register from './src/screens/Register';
+import VerHistorialMedico from './src/screens/VerHistorialMedico';
 
 /*
 FIJATE TENER INSTALADO ESTO PARA PODER NAVEGAR ENTRE PESTAÑAS!!
@@ -18,7 +19,7 @@ const Stack = createStackNavigator();
 
 const App = () => {
   // CAMBIAR headerShown: true POR False para esconder el navBar del componente
-  //Linea 23
+  //Linea 25
   return (
     <NavigationContainer fallback>
       <Stack.Navigator screenOptions={{ headerShown: true }}> 
@@ -26,6 +27,7 @@ const App = () => {
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Register" component={Register} />
+        <Stack.Screen name="VerHistorialMedico" component={VerHistorialMedico} />
       </Stack.Navigator>
     </NavigationContainer>
   );

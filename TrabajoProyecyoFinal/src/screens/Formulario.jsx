@@ -53,8 +53,7 @@ const Formulario = () => {
       IdForm: idForm + 1,
       Orden: id,
     };
-    //verificarNoIguales(nuevaRespuesta);
-
+    verificarNoIguales(nuevaRespuesta);
     setArrayRespuestas((prevRespuestas) => [...prevRespuestas, nuevaRespuesta]);
     console.log(arrayRespuestas);
   };
@@ -105,7 +104,7 @@ const Formulario = () => {
         });
     });
 
-    if (pesatañaForm !== 2) {
+    if(false){//if (pesatañaForm !== 2) {
       setPaginaForm(2);
       setTituloForm("EVALUACIÓN NO MOTORA");
     } else {
@@ -116,11 +115,15 @@ const Formulario = () => {
   const cambiarPagina = () => {
     navigation.navigate("Login");
   };
+  const cambiarPagina1 = () => {
+    navigation.navigate("VerHistorialMedico");
+  }
 
   return (
     <View style={styles.container}>
       <Text style={styles.titulo}>{tituloForm}</Text>
       <Button title="aca luki" onPress={cambiarPagina}></Button>
+      <Button title="aca luki" onPress={cambiarPagina1}></Button>
       <ScrollView contentContainerStyle={styles.scrollViewContainer}>
         {preguntas.map((pregunta) => (
           <View key={pregunta.Id} style={styles.preguntaContainer}>
