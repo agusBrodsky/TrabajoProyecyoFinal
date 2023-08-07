@@ -6,7 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Formulario from './src/screens/Formulario';
 import Login from './src/screens/Login';
 import Home from './src/screens/Home';
-import Register from './src/screens/Register';
+import RegistroScreen from './src/screens/RegistroScreen';
 
 /*
 FIJATE TENER INSTALADO ESTO PARA PODER NAVEGAR ENTRE PESTAÑAS!!
@@ -25,7 +25,7 @@ const App = () => {
         <Stack.Screen name="Formulario" component={Formulario} />
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Register" component={Register} />
+        <Stack.Screen name="RegistroScreen" component={RegistroScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

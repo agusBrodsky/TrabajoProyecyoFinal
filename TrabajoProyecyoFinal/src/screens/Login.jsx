@@ -1,8 +1,9 @@
 import React from 'react';
-import { Text, View, StyleSheet, ImageBackground, Image, Dimensions, Button, Alert,TouchableOpacity} from 'react-native';
+import { Text, View, StyleSheet, ImageBackground, Image, Dimensions, Button, Alert, TouchableOpacity } from 'react-native';
 import Logo from '../../assets/logo.png';
 import ImLogin from '../../assets/imLogin.png';
 import Input from '../components/Input';
+import { useNavigation } from '@react-navigation/native';
 
 
 const windowsHeight = Dimensions.get('window').height;
@@ -10,12 +11,12 @@ const windowsWidth = Dimensions.get('window').width;
 const height = (windowsHeight / 10) * 1.2;
 
 const Login = () => {
-  const funcionIniciarSesion = (props) => {
-    Alert.alert(props);
+  const funcionIniciarSesion = (mensaje) => {
+    Alert.alert(mensaje);
   }
-  const handleRegistroPress = () => {
-    navigation.navigate("Register");
-  }
+
+  const navigation = useNavigation();
+
   return (
     <View style={styles.container}>
       <ImageBackground source={ImLogin} resizeMode="cover" style={styles.imagenFondo}>
@@ -25,16 +26,15 @@ const Login = () => {
           <Input style={styles.textoUser} placeholder="Contraseña" pass={true}/>
         </View>
         <View style={styles.claseBoton}>
-          <Button
-            title="Iniciar Sesión"
-            onPress={() => funcionIniciarSesion("Por hacer!!")}
-          />
+          <TouchableOpacity onPress={() => funcionIniciarSesion("Por hacer!!")}>
+            <Text style={styles.textoBoton}>Iniciar Sesión</Text>
+          </TouchableOpacity>
         </View>
         <View style={styles.textoRegister}>   
-        <text>¿No tienes cuenta?</text>
-        <TouchableOpacity onPress={handleRegistroPress}>
-        <Text style={styles.linkText}>Registrate</Text>
-        </TouchableOpacity>
+          <Text style={styles.texto}>¿No tienes cuenta?</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('RegistroScreen')}>
+            <Text style={styles.textoLink}>Regístrate</Text>
+          </TouchableOpacity>
         </View>
       </ImageBackground>
     </View>
@@ -52,35 +52,36 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  textoUser:{
+  textoBoton: {
+    color: "white",
+    textAlign: "center",
+    fontSize: 15,
+    fontFamily: "sans-serif",
+    fontWeight: 'bold'
+  },
+  textoUser: {
     textAlign: 'left',
-    fontSize: 10
+    fontSize: 16
   },
-  textoRegister:{
+  textoRegister: {
     position: 'absolute',
-    fontSize: 17,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: '165%',
+  },
+  texto: {
+    fontSize: 16,
     fontWeight: 'bold',
-    textAlign: 'center',
-    marginTop: '175%',
+    fontFamily: "sans-serif",
   },
-
-
-  appButtonContainer: {
-    elevation: 8,
-    backgroundColor: "#009688",
-    borderRadius: 10,
-    paddingVertical: 10,
-    paddingHorizontal: 12
+  textoLink: {
+    fontSize: 15,
+    fontWeight: 'bold',
+    fontFamily: "sans-serif",
+    textDecorationLine: 'underline',
+    marginLeft: 5, 
   },
-  appButtonText: {
-    fontSize: 18,
-    color: "#fff",
-    fontWeight: "bold",
-    alignSelf: "center",
-    textTransform: "uppercase"
-  },
-
-
   claseLogo: {
     width: 200,
     height: 200,
@@ -97,12 +98,12 @@ const styles = StyleSheet.create({
   },
   claseBoton: {
     position: 'absolute',
-    paddingVertical: 10,
+    paddingVertical: 20,
     alignSelf: 'center',
-    backgroundColor: "#03C4D0",
+    backgroundColor: "#121885",
     borderRadius: 40,
     width: '50%',
-    marginTop: '130%'
+    marginTop: '115%',
   }
 });
 
