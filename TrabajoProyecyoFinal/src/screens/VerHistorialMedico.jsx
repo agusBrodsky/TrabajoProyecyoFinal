@@ -1,35 +1,32 @@
-import React from 'react';
-import { Text, View, StyleSheet, Image, Dimensions, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Text, View, StyleSheet, Image, Dimensions, TouchableOpacity,ScrollView } from 'react-native';
 import Logo from '../../assets/logo.png';
-import ImLogin from '../../assets/imLogin.png';
-import Input from '../components/Input';
 import Pregunta from '../components/Pregunta';
 import NavBar from '../components/NavBar';
+import axios from 'axios';
 
 const VerHistorialMedico = () => {
-  
+  const [preguntas, setPreguntas] = useState([]);
+  useEffect(() => {
+    axios.get('http://localhost:3000/Pregunta')
+      .then((res) => {
+        const arrayPreguntas = res.data;
+        setPreguntas(arrayPreguntas);
+      });
+  }, []);
+
+
+
   return (
     <View style={styles.container}>
-      <NavBar textoInicio='Historial Medico' />
+      <NavBar textoInicio="Historial Medico" />
       <Image style={styles.claseLogo} source={Logo} />
-      <View style={styles.container}>
-        <View style={styles.buttonContainer}>
-          <View style={styles.button}>
-            <TouchableOpacity onPress={() => console.log('Botón Menor presionado')}>
-              <Text style={styles.buttonText}>{'<'}</Text>
-            </TouchableOpacity>
-            <Text style={styles.claseTexto}>Mayo</Text>
-            <TouchableOpacity onPress={() => console.log('Botón Mayor presionado')}>
-              <Text style={styles.buttonText}>{'>'}</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View style={styles.divMedio}>
-          <Text style={styles.claseTextoDivMedio}>SELECCIONE EL NUMERO PARA MAS INFORMACION!</Text>
-          <Pregunta ask={"Pregunta Numero 3"} />
-          <Pregunta ask={"Pregunta Numero 2"}/>
-        </View>
-      </View>
+      <ScrollView contentContainerStyle={styles.divMedio}>
+        <Text style={styles.claseTextoDivMedio}>SELECCIONE EL NUMERO PARA MAS INFORMACION!</Text>
+        {preguntas.map((preguntita) => (
+          <Pregunta key={preguntita.Id} numAsk={preguntita.Id} ask={preguntita.Texto} />
+        ))}
+      </ScrollView>
     </View>
   );
 };
@@ -59,20 +56,23 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
   },
   claseLogo: {
-    width: Dimensions.get('window').width * 0.1,
-    height: Dimensions.get('window').width * 0.1,
+    width: Dimensions.get('window').width * 0.4,
+    height: Dimensions.get('window').width * 0.4,
     alignSelf: 'center',
     marginTop: Dimensions.get('window').height * 0.04,
     zIndex: 1,
   },
   divMedio: {
-    width: Dimensions.get('window').width * 0.9,
-    height: Dimensions.get('window').width * 0.9,
+    width: Dimensions.get('window').width * 0.7,
+    height: Dimensions.get('window').width * 0.7,
     borderWidth: 2,
     borderColor: 'black',
     alignSelf: 'center',
     borderRadius: 15,
-    marginTop: 20, // Adjust this value to control the distance from the buttonContainer
+    marginTop: 20,
+    flexDirection: 'column', // Set the flexDirection to column for vertical arrangement
+    justifyContent: 'flex-start', // Align the elements at the top of the divMedio
+    overflow:'scroll'
   },
   button: {
     flexDirection: 'row', // Arrange the elements horizontally

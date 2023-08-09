@@ -1,11 +1,11 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, Dimensions, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 
-const Pregunta = ({ ask = 'repete' }) => {
+const Pregunta = ({ numAsk=1, ask = 'repete' }) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={() => { console.log('nashe') }}>
-        <Text style={styles.textClass}>{ask}</Text>
+        <Text style={styles.textClass}>{numAsk +"."+ask}</Text>
       </TouchableOpacity>
       <View style={styles.botonNumero}>
         <Text style={styles.textoBoton}>18</Text>
@@ -13,16 +13,12 @@ const Pregunta = ({ ask = 'repete' }) => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: '#03C4D0',
-    margin: 10,
+    margin: 5,
     height: Dimensions.get('window').height * 0.03,
-    paddingHorizontal: 10,
   },
   botonNumero: {
     backgroundColor: 'green',
@@ -38,7 +34,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   textClass: {
-    fontSize: 18,
+    fontSize: 15,
+    fontWeight: 'bold',
     marginRight: 10,
   },
 });

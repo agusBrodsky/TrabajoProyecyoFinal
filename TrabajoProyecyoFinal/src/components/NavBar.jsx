@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
   },
   claseTexto1: {
     textAlign: 'center',
-    fontSize: 35,
+    fontSize: 30,
     color: 'white',
   },
   // Clase para el perfil
