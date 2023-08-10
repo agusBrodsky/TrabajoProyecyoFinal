@@ -28,7 +28,6 @@ const styles = StyleSheet.create({
     height: '15%',
     flexDirection: 'row',
     alignItems: 'center',
-    paddingTop:50
   },
   // Clase para el logo
   leftContainer: {

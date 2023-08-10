@@ -8,14 +8,14 @@ const Pregunta = ({ numAsk=1, ask = 'repete' }) => {
         <Text style={styles.textClass}>{numAsk +"."+ask}</Text>
       </TouchableOpacity>
       <View style={styles.botonNumero}>
-        <Text style={styles.textoBoton}>18</Text>
+        <Text style={styles.textoBoton}>{18}</Text>
       </View>
     </View>
   );
 };
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
+    flexDirection:'row',
     justifyContent: 'space-between',
     margin: 5,
     height: Dimensions.get('window').height * 0.03,
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   textClass: {
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: 'bold',
     marginRight: 10,
   },
