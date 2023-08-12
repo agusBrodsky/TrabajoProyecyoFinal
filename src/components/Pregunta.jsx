@@ -1,42 +1,51 @@
 import React from 'react';
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 
-const Pregunta = ({ numAsk=1, ask = 'repete' , press}) => {
+const Pregunta = ({ numAsk = 1, ask = 'repete', press }) => {
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={press}>
-      <Text style={styles.textClass}>{numAsk + "." + ask}</Text>
-    </TouchableOpacity>
-    <View style={styles.botonNumero}>
-      <TouchableOpacity onPress={press}><Text style={styles.textoBoton}>{18}</Text></TouchableOpacity>
-    </View>
+      <TouchableOpacity style={styles.touchableOpacity} onPress={press}>
+        <Text style={styles.textClass}>{numAsk + "." + ask}</Text>
+      </TouchableOpacity>
+      <View style={styles.botonContainer}>
+        <TouchableOpacity style={styles.botonNumero} onPress={press}>
+          <Text style={styles.textoBoton}>{18}</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
-    flexDirection:'row',
-    justifyContent: 'space-between',
-    margin: 5,
-    height: Dimensions.get('window').height * 0.03,
+    flexDirection: 'row', // Coloca los elementos en una fila horizontal
+    justifyContent: 'space-between', // Espacio entre los elementos
+    alignItems: 'center', // Centra verticalmente los elementos en el contenedor
+    marginBottom: 10, // Agrega espacio entre las instancias de Pregunta
+  },
+  touchableOpacity: {
+    flex: 1, // Ocupa todo el espacio disponible
+    overflow: 'hidden',
+  },
+  botonContainer: {
+    margin:12,
   },
   botonNumero: {
-    backgroundColor: 'green',
-    width: 30,
-    height: 30,
+    backgroundColor: '#03C4D0',
+    width: 70,
+    height: 50,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,
   },
   textoBoton: {
-    fontSize: 16,
+    fontSize: 20,
     color: 'white',
-    fontWeight: 'bold',
   },
   textClass: {
+    marginLeft:10,
     fontSize: 16,
     fontWeight: 'bold',
-    marginRight: 10,
   },
 });
 

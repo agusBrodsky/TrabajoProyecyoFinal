@@ -22,7 +22,7 @@ const App = () => {
   //Linea 25
   return (
     <NavigationContainer fallback>
-      <Stack.Navigator screenOptions={{ headerShown: true }}> 
+      <Stack.Navigator screenOptions={{ headerShown: false }}> 
         <Stack.Screen name="VerHistorialMedico" component={VerHistorialMedico} />
         <Stack.Screen name="Formulario" component={Formulario} />
         <Stack.Screen name="Home" component={Home} />

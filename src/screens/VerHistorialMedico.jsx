@@ -5,6 +5,10 @@ import Pregunta from '../components/Pregunta';
 import NavBar from '../components/NavBar';
 import axios from 'axios';
 import pipu from '../data/preguntas';
+import MasInfo from '../components/MasInfo';
+import preguntaEsp from '../data/preguntaEsp';
+import { format } from 'date-fns'; // para cambiar un datetime a mas manero!!
+import { es } from 'date-fns/locale'; // Importa el objeto "es" para traducciones en español
 
 const VerHistorialMedico = () => {
   const [preguntas, setPreguntas] = useState([]);
@@ -12,7 +16,8 @@ const VerHistorialMedico = () => {
   const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
   const [fecha1, setFecha1] = useState(lastDayOfMonth);
   const [modalVisible, setModalVisible] = useState(false);
-
+  const [respuestaEspecifica, setRespuestaEspecifica] = useState([]);
+  const [loading, setLoading] = useState(false);
   const meses = [
     { nro: 0, nombre: 'Enero' },
     { nro: 1, nombre: 'Febrero' },
@@ -72,14 +77,17 @@ const VerHistorialMedico = () => {
   }
   const handleButton = (idPregunta = 1) => {
     console.log("entre!!");
-    axios.get(`http://localhost:3000/Respuesta/${idPregunta}`) // AVISARLE A SANTI QUE FALTA ESTE!!!
-    .then((res) =>{
-      console.log(res.data);
-    })
-    .finally(
-      setModalVisible(true),
-    )
+    axios.get(`http://localhost:3000/Respuesta/${idPregunta}`)
+      .then((res) => {
+        console.log(res.data);
+        setRespuestaEspecifica(res.data);
+        setLoading(true);
+      })
+      .finally(
+        setModalVisible(true),
+      )
   }
+
 
   return (
     <View style={styles.container}>
@@ -96,34 +104,50 @@ const VerHistorialMedico = () => {
           </TouchableOpacity>
         </View>
       </View>
-
-      <ScrollView contentContainerStyle={styles.divMedio}>
+      <View style={styles.divMedio}>
+      <ScrollView /* este wachin</View>contentContainerStyle={styles.divMedio}*/>
         <Text style={styles.claseTextoDivMedio}>SELECCIONE EL NUMERO PARA MAS INFORMACION!</Text>
-        {pipu.map((preguntita) => (
+        {pipu.map((preguntita) => ( // despues cambiar pipu por preguntas
           <Pregunta key={preguntita.Id} numAsk={preguntita.Id} ask={preguntita.Texto} press={handleButton} />
         ))}
       </ScrollView>
+      </View>
 
       {/* Modal */}
-          
+
       <Modal
-  animationType="slide"
-  transparent={true}
-  visible={modalVisible}
-  onRequestClose={() => {
-    setModalVisible(!modalVisible);
-  }}
->
-  <View style={styles.modalContainer}>
-    <View style={styles.modalContent}>
-      <Text style={styles.modalTitle}>Detalles de la Pregunta</Text>
-      <Text style={styles.modalText}>Aquí puedes agregar información adicional relacionada con la pregunta.</Text>
-      <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(!modalVisible)}>
-        <Text style={styles.closeButtonText}>Cerrar</Text>
-      </TouchableOpacity>
-    </View>
-  </View>
-</Modal>
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <ScrollView>
+              <Text style={styles.modalTitle}>Detalles de la Pregunta</Text>
+              {loading ? (
+                <Text>Cargando...</Text>
+              ) : (
+                <React.Fragment>
+                  {preguntaEsp.map((askito) => (
+                    <MasInfo
+                      key={askito.Id}
+                      textFecha={format(new Date(askito.Dia), "eeee d 'de' MMMM yyyy", { locale: es })}
+                      text={askito.Texto}
+                    />
+                  ))}
+
+                </React.Fragment>
+              )}
+              <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(!modalVisible)}>
+                <Text style={styles.closeButtonText}>Cerrar</Text>
+              </TouchableOpacity>
+            </ScrollView>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -160,16 +184,13 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   divMedio: {
-    width: Dimensions.get('window').width * 0.7,
-    height: Dimensions.get('window').width * 0.7,
+    width: Dimensions.get('window').width * 0.9,
+    height: Dimensions.get('window').width * 0.9,
     borderWidth: 2,
     borderColor: 'black',
     alignSelf: 'center',
     borderRadius: 15,
     marginTop: 20,
-    flexDirection: 'column', // Set the flexDirection to column for vertical arrangement
-    justifyContent: 'flex-start', // Align the elements at the top of the divMedio
-    overflow: 'scroll'
   },
   button: {
     flexDirection: 'row', // Arrange the elements horizontally
@@ -186,6 +207,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 20,
     width: Dimensions.get('window').width * 0.8,
+    // Cambia el valor multiplicativo para ajustar la altura del modal
+    height: Dimensions.get('window').height * 0.5, // Por ejemplo, ajusta este valor
   },
   modalTitle: {
     fontSize: 18,
@@ -201,6 +224,15 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
     alignSelf: 'flex-end',
+    /* SEGUNDA OPCION!!
+    backgroundColor: 'blue',
+    padding: 10,
+    borderRadius: 5,
+    textAlign:'center'
+    //
+    Y PONER EL BOTON AFUERA DEL SCROLLVIEW!!
+    
+    */
   },
   closeButtonText: {
     color: 'white',

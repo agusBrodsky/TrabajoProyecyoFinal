@@ -1,54 +1,54 @@
 export default[
     {
-        id:1,
+        Id:1,
         Texto:'¿Ha experimentado temblores en las últimas 24 horas?',
-        idForm:1
+        IdForm:1
     },
     {
-        id:2,
-        Texto:'¿Ha experimentado rigidez muscular en las últimas 24 horas?',
-        idForm:1
+        Id:2,
+        Texto:'¿Ha experimentado rigIdez muscular en las últimas 24 horas?',
+        IdForm:1
     },
     {
-        id:3,
+        Id:3,
         Texto:'¿Ha experimentado lentitud de movimientos en las últimas 24 horas?',
-        idForm:1
+        IdForm:1
 
     },
     {
-        id:4,
+        Id:4,
         Texto:'pregunta numero 4',
-        idForm:1
+        IdForm:1
 
     },
     {
-        id:5,
+        Id:5,
         Texto:'pregunta numero 5',
-        idForm:1
+        IdForm:1
     },
     {
-        id:6,
+        Id:6,
         Texto:'pregunta numero 6',
-        idForm:2
+        IdForm:2
     },
     {
-        id:7,
+        Id:7,
         Texto:'pregunta numero 7',
-        idForm:2
+        IdForm:2
     },
     {
-        id:8,
+        Id:8,
         Texto:'pregunta numero 8',
-        idForm:2
+        IdForm:2
     },
     {
-        id:9,
+        Id:9,
         Texto:'pregunta numero 9',
-        idForm:2
+        IdForm:2
     },
     {
-        id:10,
+        Id:10,
         Texto:'pregunta numero 10',
-        idForm:2
+        IdForm:2
     }
 ];
