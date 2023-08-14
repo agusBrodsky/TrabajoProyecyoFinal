@@ -9,6 +9,8 @@ import MasInfo from '../components/MasInfo';
 import preguntaEsp from '../data/preguntaEsp';
 import { format } from 'date-fns'; // para cambiar un datetime a mas manero!!
 import { es } from 'date-fns/locale'; // Importa el objeto "es" para traducciones en español
+import { startOfMonth, endOfMonth } from 'date-fns';
+
 
 const VerHistorialMedico = () => {
   const [preguntas, setPreguntas] = useState([]);
@@ -18,6 +20,8 @@ const VerHistorialMedico = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [respuestaEspecifica, setRespuestaEspecifica] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [counter, setCounter] = useState(1); // Inicializa el contador en 1
+
   const meses = [
     { nro: 0, nombre: 'Enero' },
     { nro: 1, nombre: 'Febrero' },
@@ -34,12 +38,28 @@ const VerHistorialMedico = () => {
   ];
 
   useEffect(() => {
+    const today = new Date();
+    const firstDayOfMonth = startOfMonth(today);
+    const lastDayOfMonth = endOfMonth(today);
+    
+    //axios.get(`http://localhost:3000/Fecha/${firstDayOfMonth.toISOString()}/${lastDayOfMonth.toISOString()}/1`)
+    axios.get(`http://localhost:3000/Fecha/'2022-03-01'/'2022-03-31'/1`)
+      .then((res) => {
+        const arrayPreguntas = res.data;
+        setPreguntas(arrayPreguntas);
+        console.log(arrayPreguntas);
+      });
+  }, []);
+
+  /*useEffect(() => {
+    axios.get(`http://localhost:3000/Fecha/${dia1}/${dia2}/${idUsuario}`)
     axios.get('http://localhost:3000/Pregunta')
       .then((res) => {
         const arrayPreguntas = res.data;
         setPreguntas(arrayPreguntas);
-      });
-  }, []);
+        console.log(arrayPreguntas);
+      })
+  }, []);*/
 
   const cambiarMes = async (cambio) => {
     try {
@@ -107,9 +127,12 @@ const VerHistorialMedico = () => {
       <View style={styles.divMedio}>
       <ScrollView /* este wachin</View>contentContainerStyle={styles.divMedio}*/>
         <Text style={styles.claseTextoDivMedio}>SELECCIONE EL NUMERO PARA MAS INFORMACION!</Text>
-        {pipu.map((preguntita) => ( // despues cambiar pipu por preguntas
-          <Pregunta key={preguntita.Id} numAsk={preguntita.Id} ask={preguntita.Texto} press={handleButton} />
-        ))}
+                {preguntas.map((preguntita, index) => ( // despues cambiar pipu por preguntas
+          <Pregunta key={preguntita.Orden} numAsk={counter+index} ask={preguntita.TextoPregunta} cant={preguntita.cant} press={handleButton} />
+              ))}
+        
+      
+        
       </ScrollView>
       </View>
 
@@ -127,9 +150,7 @@ const VerHistorialMedico = () => {
           <View style={styles.modalContent}>
             <ScrollView>
               <Text style={styles.modalTitle}>Detalles de la Pregunta</Text>
-              {loading ? (
-                <Text>Cargando...</Text>
-              ) : (
+              
                 <React.Fragment>
                   {preguntaEsp.map((askito) => (
                     <MasInfo
@@ -138,9 +159,7 @@ const VerHistorialMedico = () => {
                       text={askito.Texto}
                     />
                   ))}
-
                 </React.Fragment>
-              )}
               <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(!modalVisible)}>
                 <Text style={styles.closeButtonText}>Cerrar</Text>
               </TouchableOpacity>

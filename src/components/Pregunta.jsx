@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 
-const Pregunta = ({ numAsk = 1, ask = 'repete', press }) => {
+const Pregunta = ({ numAsk , ask = 'repete', cant = 0 , press }) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.touchableOpacity} onPress={press}>
@@ -9,7 +9,7 @@ const Pregunta = ({ numAsk = 1, ask = 'repete', press }) => {
       </TouchableOpacity>
       <View style={styles.botonContainer}>
         <TouchableOpacity style={styles.botonNumero} onPress={press}>
-          <Text style={styles.textoBoton}>{18}</Text>
+          <Text style={styles.textoBoton}>{cant}</Text>
         </TouchableOpacity>
       </View>
     </View>
