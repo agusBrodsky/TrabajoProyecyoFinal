@@ -41,9 +41,8 @@ const VerHistorialMedico = () => {
     const today = new Date();
     const firstDayOfMonth = startOfMonth(today);
     const lastDayOfMonth = endOfMonth(today);
-    
-    //axios.get(`http://localhost:3000/Fecha/${firstDayOfMonth.toISOString()}/${lastDayOfMonth.toISOString()}/1`)
-    axios.get(`http://localhost:3000/Fecha/'2022-03-01'/'2022-03-31'/1`)
+    //axios.get(`http://localhost:3000/Fecha/"2022-03-01"/"2022-03-31"/1`)
+    axios.get(`http://localhost:3000/Fecha/${firstDayOfMonth.toISOString()}/${lastDayOfMonth.toISOString()}/1`)
       .then((res) => {
         const arrayPreguntas = res.data;
         setPreguntas(arrayPreguntas);
@@ -89,9 +88,8 @@ const VerHistorialMedico = () => {
           console.log(res.data);
         })
 
-      console.log(response.data);
-
     } catch (error) {
+      console.log(res.data);
       console.error('Error al hacer la llamada a la API:', error);
     }
   }
