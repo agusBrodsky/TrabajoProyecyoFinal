@@ -21,7 +21,7 @@ const VerHistorialMedico = () => {
   const [respuestaEspecifica, setRespuestaEspecifica] = useState([]);
   const [loading, setLoading] = useState(false);
   const [counter, setCounter] = useState(1); // Inicializa el contador en 1
-
+  //const [preguntaModal, setPreguntaModal] = useState();
   const meses = [
     { nro: 0, nombre: 'Enero' },
     { nro: 1, nombre: 'Febrero' },
@@ -42,6 +42,7 @@ const VerHistorialMedico = () => {
     const firstDayOfMonth = startOfMonth(today);
     const lastDayOfMonth = endOfMonth(today);
     //axios.get(`http://localhost:3000/Fecha/"2022-03-01"/"2022-03-31"/1`)
+    console.log(lastDayOfMonth.toISOString());
     axios.get(`http://localhost:3000/Fecha/${firstDayOfMonth.toISOString()}/${lastDayOfMonth.toISOString()}/1`)
       .then((res) => {
         const arrayPreguntas = res.data;
@@ -94,7 +95,7 @@ const VerHistorialMedico = () => {
     }
   }
   const handleButton = (idPregunta = 1) => {
-    console.log("entre!!");
+    console.log(idPregunta);
     axios.get(`http://localhost:3000/Respuesta/${idPregunta}`)
       .then((res) => {
         console.log(res.data);
@@ -126,7 +127,13 @@ const VerHistorialMedico = () => {
       <ScrollView /* este wachin</View>contentContainerStyle={styles.divMedio}*/>
         <Text style={styles.claseTextoDivMedio}>SELECCIONE EL NUMERO PARA MAS INFORMACION!</Text>
                 {preguntas.map((preguntita, index) => ( // despues cambiar pipu por preguntas
-          <Pregunta key={preguntita.Orden} numAsk={counter+index} ask={preguntita.TextoPregunta} cant={preguntita.cant} press={handleButton} />
+          <Pregunta
+            key={counter + index}
+            numAsk={counter + index}
+            ask={preguntita.TextoPregunta}
+            cant={preguntita.CANTIDAD}
+            press={() => handleButton(counter+index)}
+          />
               ))}
         
       
@@ -150,7 +157,7 @@ const VerHistorialMedico = () => {
               <Text style={styles.modalTitle}>Detalles de la Pregunta</Text>
               
                 <React.Fragment>
-                  {preguntaEsp.map((askito) => (
+                  {respuestaEspecifica.map((askito) => (
                     <MasInfo
                       key={askito.Id}
                       textFecha={format(new Date(askito.Dia), "eeee d 'de' MMMM yyyy", { locale: es })}
