@@ -17,3 +17,15 @@ USE [ProyectoFinal-HelPark]
 GO
 ALTER ROLE [db_owner] ADD MEMBER [Proyecto2]
 GO
+
+SELECT
+    R.Orden AS OrdenPregunta,
+    COUNT(*) AS CantidadRespuestasOpcion1
+FROM
+    Respuesta AS R
+WHERE
+    R.Opcion = 1
+GROUP BY
+    R.Orden
+ORDER BY
+    R.Orden;

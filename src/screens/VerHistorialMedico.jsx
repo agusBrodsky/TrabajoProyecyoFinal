@@ -36,8 +36,22 @@ const VerHistorialMedico = () => {
     { nro: 10, nombre: 'Noviembre' },
     { nro: 11, nombre: 'Diciembre' }
   ];
-
   useEffect(() => {
+    axios.get(`http://localhost:3000/Pregunta`)
+      .then((res) => {
+        setPreguntas(res.data);
+        console.log(res.data);
+      }); 
+  }, []);
+  useEffect(()=>{
+    axios.get(`http://localhost:3000/Pregunta`)
+    .then((res) => {
+      const arrayPreguntas = res.data;
+      
+    }); 
+  })
+
+  /*useEffect(() => {
     const today = new Date();
     const firstDayOfMonth = startOfMonth(today);
     const lastDayOfMonth = endOfMonth(today);
@@ -49,7 +63,7 @@ const VerHistorialMedico = () => {
         setPreguntas(arrayPreguntas);
         console.log(arrayPreguntas);
       });
-  }, []);
+  }, []);*/
 
   /*useEffect(() => {
     axios.get(`http://localhost:3000/Fecha/${dia1}/${dia2}/${idUsuario}`)
@@ -126,13 +140,13 @@ const VerHistorialMedico = () => {
       <View style={styles.divMedio}>
       <ScrollView /* este wachin</View>contentContainerStyle={styles.divMedio}*/>
         <Text style={styles.claseTextoDivMedio}>SELECCIONE EL NUMERO PARA MAS INFORMACION!</Text>
-                {preguntas.map((preguntita, index) => ( // despues cambiar pipu por preguntas
+                {preguntas.map((preguntita, index) => ( 
           <Pregunta
-            key={counter + index}
+            key={preguntita.Id}
             numAsk={counter + index}
-            ask={preguntita.TextoPregunta}
+            ask={preguntita.Texto}
             cant={preguntita.CANTIDAD}
-            press={() => handleButton(counter+index)}
+            press={() => handleButton(preguntita.Id)}
           />
               ))}
         
