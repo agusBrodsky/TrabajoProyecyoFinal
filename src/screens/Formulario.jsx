@@ -13,6 +13,7 @@ const Formulario = () => {
   const [arrayRespuestas, setArrayRespuestas] = useState([]); // ARRAY DE RESPUESTAS!!
   const [valorInput, setInput] = useState("");
   const [pip, setPip] = useState(true);
+  const [IdForm, setIdForm] = useState();
   // HACER UNA BUSQUEDA LINEAL CON OPCION (IDPREGUNTA) PARA BUSCAR LOS IGUALES Y ELIMINARLOS (CUNADO AGREGAS A NUEVA FUNCION QUE HAGA LA BUSQUEDA LINEAL ANTES DE AGREGAR A ARRAYRESPUESTA)
   const handleInputChange = (value, id_r) => {
     setInput(value);
@@ -37,8 +38,14 @@ const Formulario = () => {
         setPreguntas(arrayPreguntas);
       });
   }, []);
+  useEffect(()=>{
+    axios.get('http://localhost:3000/IdForm')
+      .then((res)=>{
+        setIdForm(res.data[0].idForm);
+      });
+  },[]);
 
-  const onPressSi = (id, pregunta, idForm) => {
+  const onPressSi = (id, pregunta) => {
     setSegundaPregunta((prevPreguntas) => ({
       ...prevPreguntas,
       [id]: true,
@@ -50,7 +57,7 @@ const Formulario = () => {
       Opcion: 1,
       Texto: valorInput !== "" ? valorInput : null,
       IdParteCuerpo: null,
-      IdForm: idForm + 1,
+      IdForm: IdForm + 1,
       Orden: id,
     };
     verificarNoIguales(nuevaRespuesta);
@@ -84,11 +91,12 @@ const Formulario = () => {
       Opcion: 0,
       Texto: null,
       IdParteCuerpo: null,
-      IdForm: idForm + 1,
+      IdForm: IdForm + 1,
       Orden: id,
     };
     verificarNoIguales(nuevaRespuesta);
     setArrayRespuestas((prevRespuestas) => [...prevRespuestas, nuevaRespuesta]);
+    console.log(arrayRespuestas);
   };
 
   const continuarForm = () => {
@@ -130,10 +138,10 @@ const Formulario = () => {
             <Text style={styles.clasePregunta}>{pregunta.Texto}</Text>
             {/*                                                         BOTONES                                                                                */}
             <View style={styles.claseBotonesContainer}>
-                <TouchableOpacity style={[styles.button, { backgroundColor: 'green' }]} onPress={() => onPressSi(pregunta.Id, pregunta.Texto, pregunta.IdForm)}>
+                <TouchableOpacity style={[styles.button, { backgroundColor: 'green' }]} onPress={() => onPressSi(pregunta.Id, pregunta.Texto)}>
                   <Text style={styles.buttonText}>Si</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.button, { backgroundColor: 'red' }]} onPress={() => onPressNo(pregunta.Id, pregunta.Texto, pregunta.IdForm)}>
+                <TouchableOpacity style={[styles.button, { backgroundColor: 'red' }]} onPress={() => onPressNo(pregunta.Id, pregunta.Texto)}>
                   <Text style={styles.buttonText}>No</Text>
                 </TouchableOpacity>
             </View>
