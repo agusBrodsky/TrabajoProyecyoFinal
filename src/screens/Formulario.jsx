@@ -98,20 +98,40 @@ const Formulario = () => {
     setArrayRespuestas((prevRespuestas) => [...prevRespuestas, nuevaRespuesta]);
     console.log(arrayRespuestas);
   };
-
+ 
+  
   const continuarForm = () => {
+    const Dia = new Date();
+    let veridicojeje = true;
     console.log(arrayRespuestas);
     arrayRespuestas.forEach((respuesta) => {
       console.log(respuesta);
-      axios.post('http://localhost:3000/Respuesta', respuesta)
+      /*axios.post('http://localhost:3000/Respuesta', respuesta)
         .then((res) => {
           console.log('Respuestas enviadas con éxito');
+          veridicojeje = true;
         })
         .catch((error) => {
           console.log('Error al agregar las respuestas a la base de datos', error);
-        });
-    });
+          veridicojeje = false;
+        })
+        .finally(()=>{
+    */
+          console.log(Dia.toISOString());
 
+          axios.post('http://localhost:3000/Form', {IdUsuario: 1,Dia: Dia.toISOString().slice(0, 10)})
+            .then((res)=>{
+              console.log("ya volvi!")
+            })
+            .catch((error)=>{
+              console.log('Error al agregar las respuestas a la base de datos',error)
+            })
+      //  })
+        
+    });
+    if(veridicojeje){
+      
+    }
     if(false){//if (pesatañaForm !== 2) {
       setPaginaForm(2);
       setTituloForm("EVALUACIÓN NO MOTORA");

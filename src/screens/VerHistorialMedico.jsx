@@ -43,15 +43,8 @@ const VerHistorialMedico = () => {
         console.log(res.data);
       }); 
   }, []);
-  useEffect(()=>{
-    axios.get(`http://localhost:3000/Pregunta`)
-    .then((res) => {
-      const arrayPreguntas = res.data;
-      
-    }); 
-  })
-
-  /*useEffect(() => {
+  
+  useEffect(() => {
     const today = new Date();
     const firstDayOfMonth = startOfMonth(today);
     const lastDayOfMonth = endOfMonth(today);
@@ -60,10 +53,10 @@ const VerHistorialMedico = () => {
     axios.get(`http://localhost:3000/Fecha/${firstDayOfMonth.toISOString()}/${lastDayOfMonth.toISOString()}/1`)
       .then((res) => {
         const arrayPreguntas = res.data;
-        setPreguntas(arrayPreguntas);
+        
         console.log(arrayPreguntas);
       });
-  }, []);*/
+  }, []);
 
   /*useEffect(() => {
     axios.get(`http://localhost:3000/Fecha/${dia1}/${dia2}/${idUsuario}`)
