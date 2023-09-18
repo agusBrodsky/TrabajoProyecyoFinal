@@ -29,3 +29,10 @@ GROUP BY
     R.Orden
 ORDER BY
     R.Orden;
+
+
+
+SELECT Orden,TextoPregunta, COUNT(*) AS Cantidad_Opcion_1
+FROM Respuesta
+WHERE Opcion = 1
+GROUP BY Orden;

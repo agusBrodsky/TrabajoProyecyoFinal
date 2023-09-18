@@ -14,6 +14,7 @@ import { startOfMonth, endOfMonth } from 'date-fns';
 
 const VerHistorialMedico = () => {
   const [preguntas, setPreguntas] = useState([]);
+  const [respuesta,setRespuesta] = useState([]);
   const today = new Date();
   const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
   const [fecha1, setFecha1] = useState(lastDayOfMonth);
@@ -37,10 +38,10 @@ const VerHistorialMedico = () => {
     { nro: 11, nombre: 'Diciembre' }
   ];
   useEffect(() => {
-    axios.get(`http://localhost:3000/Pregunta`)
+    axios.get(`http://localhost:3000/Respuesta`)
       .then((res) => {
         setPreguntas(res.data);
-        console.log(res.data);
+        setRespuesta(res.data);
       }); 
   }, []);
   
@@ -49,8 +50,8 @@ const VerHistorialMedico = () => {
     const firstDayOfMonth = startOfMonth(today);
     const lastDayOfMonth = endOfMonth(today);
     //axios.get(`http://localhost:3000/Fecha/"2022-03-01"/"2022-03-31"/1`)
-    console.log(lastDayOfMonth.toISOString());
-    axios.get(`http://localhost:3000/Fecha/${firstDayOfMonth.toISOString()}/${lastDayOfMonth.toISOString()}/1`)
+    console.log(lastDayOfMonth.toISOString()); 
+    axios.get(`http://localhost:3000/Fecha/${firstDayOfMonth.toISOString()}/${lastDayOfMonth.toISOString()}/1`) // hay que arreglarlo
       .then((res) => {
         const arrayPreguntas = res.data;
         
@@ -137,7 +138,7 @@ const VerHistorialMedico = () => {
           <Pregunta
             key={preguntita.Id}
             numAsk={counter + index}
-            ask={preguntita.Texto}
+            ask={preguntita.TextoPregunta}
             cant={preguntita.CANTIDAD}
             press={() => handleButton(preguntita.Id)}
           />

@@ -14,7 +14,8 @@ const Formulario = () => {
   const [valorInput, setInput] = useState("");
   const [pip, setPip] = useState(true);
   const [IdForm, setIdForm] = useState();
-  // HACER UNA BUSQUEDA LINEAL CON OPCION (IDPREGUNTA) PARA BUSCAR LOS IGUALES Y ELIMINARLOS (CUNADO AGREGAS A NUEVA FUNCION QUE HAGA LA BUSQUEDA LINEAL ANTES DE AGREGAR A ARRAYRESPUESTA)
+  const [idUser, setIdUser] = useState(1);  
+
   const handleInputChange = (value, id_r) => {
     setInput(value);
     actualizarTexto(id_r, value);
@@ -38,27 +39,45 @@ const Formulario = () => {
         setPreguntas(arrayPreguntas);
       });
   }, []);
-  useEffect(()=>{
-    axios.get('http://localhost:3000/IdForm')
-      .then((res)=>{
-        setIdForm(res.data[0].idForm);
-      });
-  },[]);
 
-  const onPressSi = (id, pregunta) => {
+  const onPressSi = (id, texto) => {
     setSegundaPregunta((prevPreguntas) => ({
       ...prevPreguntas,
       [id]: true,
     }));
 
+    const fechaActual = new Date(); // Obtiene la fecha y hora actual
+      console.log(texto);
     const nuevaRespuesta = {
       Id: null,
-      TextoPregunta: pregunta,
+      TextoPregunta: texto,
       Opcion: 1,
       Texto: valorInput !== "" ? valorInput : null,
       IdParteCuerpo: null,
-      IdForm: IdForm + 1,
       Orden: id,
+      IdUsuario:idUser, // falta cambiar el user, por ahora siempre es 1
+      Fecha: fechaActual.toISOString(),
+    };
+    verificarNoIguales(nuevaRespuesta);
+    setArrayRespuestas((prevRespuestas) => [...prevRespuestas, nuevaRespuesta]);
+    console.log(arrayRespuestas);
+  };
+  // -----------------------------------------------------                                                    ------------------------------------------------------------------------------------------------
+  const onPressNo = (id, texto) => {
+    setSegundaPregunta((prevPreguntas) => ({
+      ...prevPreguntas,
+      [id]: false,
+    }));
+    const fechaActual = new Date(); // Obtiene la fecha y hora actual
+    const nuevaRespuesta = {
+      Id: null,
+      TextoPregunta: texto,
+      Opcion: 0,
+      Texto: valorInput !== "" ? valorInput : null,
+      IdParteCuerpo: null,
+      Orden: id,
+      IdUsuario:idUser, // falta cambiar el user, por ahora siempre es 1
+      Fecha: fechaActual.toISOString(), // Agrega la fecha actual en formato ISO
     };
     verificarNoIguales(nuevaRespuesta);
     setArrayRespuestas((prevRespuestas) => [...prevRespuestas, nuevaRespuesta]);
@@ -76,37 +95,14 @@ const Formulario = () => {
     arrayRespuestas.map((objeto) => { // objeto es la respuesta en cada ciclo!
 
     })
-    //.............................................................
   }
-  const onPressNo = (id, pregunta, idForm) => {
-    console.log("onPressNo");
-    setSegundaPregunta((prevPreguntas) => ({
-      ...prevPreguntas,
-      [id]: false,
-    }));
-
-    const nuevaRespuesta = {
-      Id: null,
-      TextoPregunta: pregunta,
-      Opcion: 0,
-      Texto: null,
-      IdParteCuerpo: null,
-      IdForm: IdForm + 1,
-      Orden: id,
-    };
-    verificarNoIguales(nuevaRespuesta);
-    setArrayRespuestas((prevRespuestas) => [...prevRespuestas, nuevaRespuesta]);
-    console.log(arrayRespuestas);
-  };
- 
-  
   const continuarForm = () => {
-    const Dia = new Date();
     let veridicojeje = true;
+    console.log("Continuar Form");
     console.log(arrayRespuestas);
     arrayRespuestas.forEach((respuesta) => {
       console.log(respuesta);
-      /*axios.post('http://localhost:3000/Respuesta', respuesta)
+      axios.post('http://localhost:3000/Respuesta', respuesta)
         .then((res) => {
           console.log('Respuestas enviadas con éxito');
           veridicojeje = true;
@@ -115,28 +111,13 @@ const Formulario = () => {
           console.log('Error al agregar las respuestas a la base de datos', error);
           veridicojeje = false;
         })
-        .finally(()=>{
-    */
-          console.log(Dia.toISOString());
-
-          axios.post('http://localhost:3000/Form', {IdUsuario: 1,Dia: Dia.toISOString().slice(0, 10)})
-            .then((res)=>{
-              console.log("ya volvi!")
-            })
-            .catch((error)=>{
-              console.log('Error al agregar las respuestas a la base de datos',error)
-            })
-      //  })
-        
-    });
-    if(veridicojeje){
       
-    }
+    });
     if(false){//if (pesatañaForm !== 2) {
       setPaginaForm(2);
       setTituloForm("EVALUACIÓN NO MOTORA");
     } else {
-      navigation.navigate("Home");
+      //navigation.navigate("Home");
     }
   };
 
