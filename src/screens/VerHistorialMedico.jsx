@@ -14,7 +14,8 @@ import { startOfMonth, endOfMonth } from 'date-fns';
 
 const VerHistorialMedico = () => {
   const [preguntas, setPreguntas] = useState([]);
-  const [respuesta,setRespuesta] = useState([]);
+  const [respuesta, setRespuesta] = useState([]);
+  const [cantidadPorOrden, setCantidadPorOrden] = useState({});
   const today = new Date();
   const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
   const [fecha1, setFecha1] = useState(lastDayOfMonth);
@@ -38,36 +39,55 @@ const VerHistorialMedico = () => {
     { nro: 11, nombre: 'Diciembre' }
   ];
   useEffect(() => {
-    axios.get(`http://localhost:3000/Respuesta`)
+    axios.get(`http://localhost:3000/Pregunta`)
       .then((res) => {
         setPreguntas(res.data);
-        setRespuesta(res.data);
-      }); 
-  }, []);
-  
-  useEffect(() => {
-    const today = new Date();
-    const firstDayOfMonth = startOfMonth(today);
-    const lastDayOfMonth = endOfMonth(today);
-    //axios.get(`http://localhost:3000/Fecha/"2022-03-01"/"2022-03-31"/1`)
-    console.log(lastDayOfMonth.toISOString()); 
-    axios.get(`http://localhost:3000/Fecha/${firstDayOfMonth.toISOString()}/${lastDayOfMonth.toISOString()}/1`) // hay que arreglarlo
-      .then((res) => {
-        const arrayPreguntas = res.data;
-        
-        console.log(arrayPreguntas);
       });
+
+  }, []);
+
+  useEffect(() => {
+    axios.get(`http://localhost:3000/Respuesta`)
+      .then((res) => {
+        console.log(res.data);
+        setRespuesta(res.data);
+      })
+      .finally(
+        respuesta.forEach((item) => {
+      if (item.opcion == 1) {
+        const orden = item.orden;
+        cantidadRespuestasPorOrden[orden] = (cantidadRespuestasPorOrden[orden] || 0) + 1;
+      }
+      
+    })
+      )
+      
+    
+    console.log(respuesta+ "esto es respuesta!");
+    const cantidadRespuestasPorOrden = {};
+    
+    // Actualiza el estado con la cantidad de respuestas por orden
+    console.log(cantidadPorOrden)
+    setCantidadPorOrden(cantidadRespuestasPorOrden);
+    
   }, []);
 
   /*useEffect(() => {
-    axios.get(`http://localhost:3000/Fecha/${dia1}/${dia2}/${idUsuario}`)
-    axios.get('http://localhost:3000/Pregunta')
-      .then((res) => {
-        const arrayPreguntas = res.data;
-        setPreguntas(arrayPreguntas);
-        console.log(arrayPreguntas);
-      })
-  }, []);*/
+    // Calcula la cantidad de respuestas para cada valor de respuesta.orden
+    const cantidadRespuestasPorOrden = {};
+
+    respuesta.forEach((item) => {
+      if (item.opcion == 1)
+      {
+        const orden = item.orden;
+        cantidadRespuestasPorOrden[orden] = (cantidadRespuestasPorOrden[orden] || 0) + 1;
+    }
+    });
+
+    // Actualiza el estado con la cantidad de respuestas por orden
+    console.log(cantidadPorOrden)
+    setCantidadPorOrden(cantidadRespuestasPorOrden);
+  }, [respuesta]);  */
 
   const cambiarMes = async (cambio) => {
     try {
@@ -90,7 +110,7 @@ const VerHistorialMedico = () => {
       const dia2 = "2022-03-31"; // la fecha de fin
       const idUsuario = 1;
 
-      //axios.get(`http://localhost:3000/Fecha/${fecha1}/${dia2}/${idUsuario}`)
+
       axios.get(`http://localhost:3000/Fecha/${dia1}/${dia2}/${idUsuario}`)
 
         .then((res) => {
@@ -132,21 +152,21 @@ const VerHistorialMedico = () => {
         </View>
       </View>
       <View style={styles.divMedio}>
-      <ScrollView /* este wachin</View>contentContainerStyle={styles.divMedio}*/>
-        <Text style={styles.claseTextoDivMedio}>SELECCIONE EL NUMERO PARA MAS INFORMACION!</Text>
-                {preguntas.map((preguntita, index) => ( 
-          <Pregunta
-            key={preguntita.Id}
-            numAsk={counter + index}
-            ask={preguntita.TextoPregunta}
-            cant={preguntita.CANTIDAD}
-            press={() => handleButton(preguntita.Id)}
-          />
-              ))}
-        
-      
-        
-      </ScrollView>
+        <ScrollView /* este wachin</View>contentContainerStyle={styles.divMedio}*/>
+          <Text style={styles.claseTextoDivMedio}>SELECCIONE EL NUMERO PARA MAS INFORMACION!</Text>
+          {preguntas.map((preguntita, index) => (
+            <Pregunta
+              key={preguntita.Id}
+              numAsk={counter + index}
+              ask={preguntita.Texto}
+              cant={cantidadPorOrden[index]}
+              press={() => handleButton(preguntita.Id)}
+            />
+          ))}
+
+
+
+        </ScrollView>
       </View>
 
       {/* Modal */}
@@ -163,16 +183,16 @@ const VerHistorialMedico = () => {
           <View style={styles.modalContent}>
             <ScrollView>
               <Text style={styles.modalTitle}>Detalles de la Pregunta</Text>
-              
-                <React.Fragment>
-                  {respuestaEspecifica.map((askito) => (
-                    <MasInfo
-                      key={askito.Id}
-                      textFecha={format(new Date(askito.Dia), "eeee d 'de' MMMM yyyy", { locale: es })}
-                      text={askito.Texto}
-                    />
-                  ))}
-                </React.Fragment>
+
+              <React.Fragment>
+                {respuestaEspecifica.map((askito) => (
+                  <MasInfo
+                    key={askito.Id}
+                    textFecha={format(new Date(askito.Dia), "eeee d 'de' MMMM yyyy", { locale: es })}
+                    text={askito.Texto}
+                  />
+                ))}
+              </React.Fragment>
               <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(!modalVisible)}>
                 <Text style={styles.closeButtonText}>Cerrar</Text>
               </TouchableOpacity>

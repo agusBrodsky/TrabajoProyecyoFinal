@@ -117,7 +117,7 @@ const Formulario = () => {
       setPaginaForm(2);
       setTituloForm("EVALUACIÓN NO MOTORA");
     } else {
-      //navigation.navigate("Home");
+      navigation.navigate("Home");
     }
   };
 
