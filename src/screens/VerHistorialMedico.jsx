@@ -49,29 +49,25 @@ const VerHistorialMedico = () => {
   useEffect(() => {
     axios.get(`http://localhost:3000/Respuesta`)
       .then((res) => {
+        console.log("adentro del respuesta"),
         console.log(res.data);
         setRespuesta(res.data);
       })
-      .finally(
-        respuesta.forEach((item) => {
-      if (item.opcion == 1) {
-        const orden = item.orden;
-        cantidadRespuestasPorOrden[orden] = (cantidadRespuestasPorOrden[orden] || 0) + 1;
-      }
-      
-    })
-      )
-      
-    
-    console.log(respuesta+ "esto es respuesta!");
-    const cantidadRespuestasPorOrden = {};
-    
-    // Actualiza el estado con la cantidad de respuestas por orden
-    console.log(cantidadPorOrden)
-    setCantidadPorOrden(cantidadRespuestasPorOrden);
-    
+
   }, []);
 
+  useEffect(() => {
+    const cantidadRespuestasPorOrden = {};
+  
+    respuesta.forEach((item) => {
+      if (item.Opcion) {
+        cantidadRespuestasPorOrden[item.Orden] = (cantidadRespuestasPorOrden[item.Orden] || 0) + 1;
+      }
+    });
+    console.log(cantidadRespuestasPorOrden);
+    setCantidadPorOrden(cantidadRespuestasPorOrden);
+  }, [respuesta]);
+  
   /*useEffect(() => {
     // Calcula la cantidad de respuestas para cada valor de respuesta.orden
     const cantidadRespuestasPorOrden = {};
@@ -123,7 +119,7 @@ const VerHistorialMedico = () => {
     }
   }
   const handleButton = (idPregunta = 1) => {
-    console.log(idPregunta);
+    console.log("Entre a la funcion handleButton");
     axios.get(`http://localhost:3000/Respuesta/${idPregunta}`)
       .then((res) => {
         console.log(res.data);
@@ -159,7 +155,7 @@ const VerHistorialMedico = () => {
               key={preguntita.Id}
               numAsk={counter + index}
               ask={preguntita.Texto}
-              cant={cantidadPorOrden[index]}
+              cant={cantidadPorOrden[preguntita.Id]}
               press={() => handleButton(preguntita.Id)}
             />
           ))}
@@ -188,7 +184,8 @@ const VerHistorialMedico = () => {
                 {respuestaEspecifica.map((askito) => (
                   <MasInfo
                     key={askito.Id}
-                    textFecha={format(new Date(askito.Dia), "eeee d 'de' MMMM yyyy", { locale: es })}
+                    textFecha={askito.TextoPregunta}
+                    //textFecha={format(new Date(askito.Dia), "eeee d 'de' MMMM yyyy", { locale: es })}
                     text={askito.Texto}
                   />
                 ))}
