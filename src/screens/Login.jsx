@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Text, View, StyleSheet, ImageBackground, Image, Dimensions, Button, Alert, TouchableOpacity } from 'react-native';
 import Logo from '../../assets/logo.png';
 import ImLogin from '../../assets/imLogin.png';
@@ -6,33 +6,74 @@ import Input from '../components/Input';
 import { useNavigation } from '@react-navigation/native';
 
 
-const windowsHeight = Dimensions.get('window').height;
-const windowsWidth = Dimensions.get('window').width;
-const height = (windowsHeight / 10) * 1.2;
 
 const Login = () => {
-  const funcionIniciarSesion = (mensaje) => {
-    Alert.alert(mensaje);
-  }
-
   const navigation = useNavigation();
+  const [user,setUser] = useState({Usuario:'',Password:'',Correo:''});
+  const windowsHeight = Dimensions.get('window').height;
+  const windowsWidth = Dimensions.get('window').width;
+  const height = (windowsHeight / 10) * 1.2;
 
+
+
+  const funcionIniciarSesion = () => {
+    console.log(user);
+    navigation.navigate('Home');
+  }
+  const validarUsuarioCorreo = ( value , id_r ="Usuario") => {
+    
+    let TOPE = 0;
+    while (value.length > TOPE) {
+      if (value[TOPE] === '@') {
+        id_r = "Correo";
+        TOPE = value.length; // salir del bucle
+      } else {
+        TOPE++;
+      }
+    }
+    handleInputChange(value,id_r);
+  };
+  const handleInputChange = (value, id_r = 'pass') => {
+    console.log(id_r);
+    if (id_r === "Usuario") {
+      setUser(prevUser => ({
+        ...prevUser,
+        Usuario: value,
+      }));
+    }
+    if (id_r === "Correo") {
+      setUser(prevUser => ({
+        ...prevUser,
+        Correo: value,
+      }));
+    }
+    if (id_r === "pass") {
+      setUser(prevUser => ({
+        ...prevUser,
+        Password: value,
+      }));
+    }
+  };
+  
+  
+  
   return (
     <View style={styles.container}>
       <ImageBackground source={ImLogin} resizeMode="cover" style={styles.imagenFondo}>
         <Image style={styles.claseLogo} source={Logo} />
         <View style={styles.inputContainer}>
-          <Input style={styles.textoUser} placeholder="Usuario o correo electrónico" />
-          <Input style={styles.textoUser} placeholder="Contraseña" pass={true}/>
+
+          <Input style={styles.textoUser} placeholder="Usuario o correo electrónico"  onChange={validarUsuarioCorreo}/>
+          <Input style={styles.textoUser} id_r="password" placeholder="Contraseña" onChange={handleInputChange} pass={true}/>
         </View>
         <View style={styles.claseBoton}>
-          <TouchableOpacity onPress={() => funcionIniciarSesion("Por hacer!!")}>
+          <TouchableOpacity onPress={() => funcionIniciarSesion()}>
             <Text style={styles.textoBoton}>Iniciar Sesión</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.textoRegister}>   
           <Text style={styles.texto}>¿No tienes cuenta?</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('RegistroScreen')}>
+          <TouchableOpacity onPress={() => navigation.navigate('Register')}>
             <Text style={styles.textoLink}>Regístrate</Text>
           </TouchableOpacity>
         </View>

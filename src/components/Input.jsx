@@ -5,11 +5,7 @@ const Input = ({ id,placeholder, pass = false, onChange }) => {
   const [inputValue, setInputValue] = useState('');
 
   const ocultarPass = (text) => {
-    if (pass) {
-      setInputValue(text.replace(/./g, '*'));
-    } else {
       setInputValue(text);
-    }
     onChange(text,id); // Llama a la función onChange del componente padre
   };
 
@@ -20,6 +16,7 @@ const Input = ({ id,placeholder, pass = false, onChange }) => {
         style={styles.input}
         value={inputValue}
         onChangeText={ocultarPass}
+        secureTextEntry={pass}
       />
     </View>
   );

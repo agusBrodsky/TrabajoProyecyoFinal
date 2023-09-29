@@ -42,6 +42,12 @@ const Register = () => {
       <TouchableOpacity style={styles.buttonContainer}>
         <Text style={styles.buttonText}>Registrarse</Text>
       </TouchableOpacity>
+      <View style={styles.textoRegister}>   
+          <Text style={styles.texto}>Ya tienes una cuenta?</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+            <Text style={styles.textoLink}>Inicia Sesion!😊</Text>
+          </TouchableOpacity>
+        </View>
     </View>
   );
 }
@@ -59,6 +65,25 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  textoRegister: {
+    position: 'absolute',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: '165%',
+  },
+  texto: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    fontFamily: "sans-serif",
+  },
+  textoLink: {
+    fontSize: 15,
+    fontWeight: 'bold',
+    fontFamily: "sans-serif",
+    textDecorationLine: 'underline',
+    marginLeft: 5, 
   },
   claseLogo: {
     width: 100,
