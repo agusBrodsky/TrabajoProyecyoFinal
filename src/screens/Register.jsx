@@ -1,23 +1,84 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, Switch, TouchableOpacity } from 'react-native';
-import Input from '../components/Input'; // Asegúrate de proporcionar la ruta correcta al archivo de Input
-import Logo from '../../assets/logo.png'; // Asegúrate de proporcionar la ruta correcta al archivo de Logo
+import Input from '../components/Input'; 
+import Logo from '../../assets/logo.png'; 
+import InputConOpciones from '../components/InputConOpciones';
+import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 
 const Register = () => {
-  // Aquí puedes agregar la lógica y componentes necesarios para el proceso de registro.
+  const navigation = useNavigation();
+  let date = new Date().toISOString();
+  const [user, setUser] = useState({
+    Nombre: null,
+    Apellido: null,
+    Sexo: null,
+    FechaDeNacimiento: date,
+    Correo: null,
+    Password: null,
+  });
   const [recibirNotificaciones, setRecibirNotificaciones] = useState(false);
   const [aceptarTerminos, setAceptarTerminos] = useState(false);
 
+  const handleInputChange = (value, id) => {
+    setUser(prevUser => ({
+      ...prevUser,
+      [id]: value,
+    }));
+  };
+  const funcionIniciarSesion = ()=>{
+    axios.post('http://localhost:3000/Register', user)
+    .then((res) => {
+      console.log(res.data.message);
+        if(res.data.message != null)
+        {
+          navigation.navigate('Home');//,{ user:obj});
+        }  
+    })
+    .catch(error => {
+      console.log("usuario no registrado!")
+    });
+    
+  }
+  const genderOptions = [
+    {label:'',value:null},
+    { label: 'Femenino', value: 'F' },
+    { label: 'Masculino', value: 'M' },
+    { label: 'Otro', value: 'Otro' },
+  ];
   return (
     <View style={styles.container}>
       <View style={styles.logoContainer}>
         <Image style={styles.claseLogo} source={Logo} />
       </View>
       <View style={styles.inputContainer}>
-        <Input style={styles.textoUser} placeholder="Nombre" />
-        <Input style={styles.textoUser} placeholder="Apellido" />
-        <Input style={styles.textoUser} placeholder="Correo electrónico" />
-        <Input style={styles.textoUser} placeholder="Contraseña" pass={true} />
+      <Input
+          style={styles.textoUser}
+          placeholder="Nombre"
+          onChange={value => handleInputChange(value, 'Nombre')}
+        />
+        <Input
+          style={styles.textoUser}
+          placeholder="Apellido"
+          onChange={value => handleInputChange(value, 'Apellido')}
+        />
+        <Input
+          style={styles.textoUser}
+          placeholder="Correo electrónico"
+          onChange={value => handleInputChange(value, 'Correo')}
+        />
+        <Input
+          style={styles.textoUser}
+          placeholder="Contraseña"
+          pass={true}
+          onChange={value => handleInputChange(value, 'Password')}
+        />
+        <InputConOpciones
+        style={styles.textoUser}
+        placeholder="Sexo"
+        options={genderOptions}
+        onChange={value => handleInputChange(value, 'Sexo')}
+      />
       </View>
       <View style={styles.checkboxContainer}>
         <View style={styles.opcionesContainer}>
@@ -39,12 +100,12 @@ const Register = () => {
           <Text style={[styles.opcionTexto, styles.textoIzquierda]}>Aceptar términos y condiciones</Text>
         </View>
       </View>
-      <TouchableOpacity style={styles.buttonContainer}>
+      <TouchableOpacity style={styles.buttonContainer} onPress={() => funcionIniciarSesion()}>
         <Text style={styles.buttonText}>Registrarse</Text>
       </TouchableOpacity>
       <View style={styles.textoRegister}>   
           <Text style={styles.texto}>Ya tienes una cuenta?</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
             <Text style={styles.textoLink}>Inicia Sesion!😊</Text>
           </TouchableOpacity>
         </View>

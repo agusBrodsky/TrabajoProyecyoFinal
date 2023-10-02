@@ -49,8 +49,6 @@ const VerHistorialMedico = () => {
   useEffect(() => {
     axios.get(`http://localhost:3000/Respuesta`)
       .then((res) => {
-        console.log("adentro del respuesta"),
-        console.log(res.data);
         setRespuesta(res.data);
       })
 
@@ -64,7 +62,6 @@ const VerHistorialMedico = () => {
         cantidadRespuestasPorOrden[item.Orden] = (cantidadRespuestasPorOrden[item.Orden] || 0) + 1;
       }
     });
-    console.log(cantidadRespuestasPorOrden);
     setCantidadPorOrden(cantidadRespuestasPorOrden);
   }, [respuesta]);
   

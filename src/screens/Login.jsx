@@ -4,8 +4,7 @@ import Logo from '../../assets/logo.png';
 import ImLogin from '../../assets/imLogin.png';
 import Input from '../components/Input';
 import { useNavigation } from '@react-navigation/native';
-
-
+import axios from 'axios';
 
 const Login = () => {
   const navigation = useNavigation();
@@ -14,11 +13,27 @@ const Login = () => {
   const windowsWidth = Dimensions.get('window').width;
   const height = (windowsHeight / 10) * 1.2;
 
-
+  
 
   const funcionIniciarSesion = () => {
+    axios.post('http://localhost:3000/Usuario', user)
+      .then((res) => {
+        console.log(res.data.message);
+          //(res.data.message != "usuario no registrado!") ? navigation.navigate('Home', { user: obj });
+          if(res.data.message != null)
+          {
+            navigation.navigate('Home');//,{ user});
+          }
+          
+      })
+      
+      .catch(error => {
+        console.log("usuario no logueado!")
+        Alert.alert('usuario no logueado!');
+      });
+      
+
     console.log(user);
-    navigation.navigate('Home');
   }
   const validarUsuarioCorreo = ( value , id_r ="Usuario") => {
     
@@ -98,7 +113,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 15,
     fontFamily: "sans-serif",
-    fontWeight: 'bold'
+    fontWeight: 'bold' 
   },
   textoUser: {
     textAlign: 'left',
