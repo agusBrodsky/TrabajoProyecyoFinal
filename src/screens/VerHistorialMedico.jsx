@@ -43,15 +43,11 @@ const VerHistorialMedico = () => {
       .then((res) => {
         setPreguntas(res.data);
       });
-
-  }, []);
-
-  useEffect(() => {
+    //---------------------------------------------------------------------------------------------------------------------------------------
     axios.get(`http://localhost:3000/Respuesta`)
       .then((res) => {
         setRespuesta(res.data);
       })
-
   }, []);
 
   useEffect(() => {
@@ -115,6 +111,7 @@ const VerHistorialMedico = () => {
       console.error('Error al hacer la llamada a la API:', error);
     }
   }
+  
   const handleButton = (idPregunta = 1) => {
     console.log("Entre a la funcion handleButton");
     axios.get(`http://localhost:3000/Respuesta/${idPregunta}`)
