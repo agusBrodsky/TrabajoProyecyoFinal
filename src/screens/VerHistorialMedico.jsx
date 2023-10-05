@@ -23,6 +23,10 @@ const VerHistorialMedico = () => {
   const [respuestaEspecifica, setRespuestaEspecifica] = useState([]);
   const [loading, setLoading] = useState(false);
   const [counter, setCounter] = useState(1); // Inicializa el contador en 1
+  const [newRespuesta,setNewRespuesta] = useState([
+    {
+
+    }]);
   //const [preguntaModal, setPreguntaModal] = useState();
   const meses = [
     { nro: 0, nombre: 'Enero' },
@@ -47,7 +51,16 @@ const VerHistorialMedico = () => {
     axios.get(`http://localhost:3000/Respuesta`)
       .then((res) => {
         setRespuesta(res.data);
-      })
+        
+        /*const cantidadRespuestasPorOrden = {};
+        res.data.forEach((item) => {
+            if (item.Opcion) {
+              cantidadRespuestasPorOrden[item.Orden] = (cantidadRespuestasPorOrden[item.Orden] || 0) + 1;
+            }
+          });
+          setCantidadPorOrden(cantidadRespuestasPorOrden);*/
+    })
+    cambiarMes();
   }, []);
 
   useEffect(() => {
@@ -60,57 +73,44 @@ const VerHistorialMedico = () => {
     });
     setCantidadPorOrden(cantidadRespuestasPorOrden);
   }, [respuesta]);
-  
-  /*useEffect(() => {
-    // Calcula la cantidad de respuestas para cada valor de respuesta.orden
-    const cantidadRespuestasPorOrden = {};
 
-    respuesta.forEach((item) => {
-      if (item.opcion == 1)
-      {
-        const orden = item.orden;
-        cantidadRespuestasPorOrden[orden] = (cantidadRespuestasPorOrden[orden] || 0) + 1;
-    }
-    });
-
-    // Actualiza el estado con la cantidad de respuestas por orden
-    console.log(cantidadPorOrden)
-    setCantidadPorOrden(cantidadRespuestasPorOrden);
-  }, [respuesta]);  */
-
-  const cambiarMes = async (cambio) => {
+  const cambiarMes = async (cambio =null) => {
     try {
+      let newFecha1 = new Date(fecha1);
+  
       if (cambio === "menor") {
-        const newFecha1 = new Date(fecha1);
-
         newFecha1.setMonth(newFecha1.getMonth() - 1);
-
-        setFecha1(newFecha1);
-
-      }
-      else {
-        const newFecha1 = new Date(fecha1);
+      } if(cambio ==="mayor") {
         newFecha1.setMonth(newFecha1.getMonth() + 1);
-
-        setFecha1(newFecha1);
       }
-      const fechaActual = new Date();
-      const dia1 = "2022-03-1"; // la fecha de inicio
-      const dia2 = "2022-03-31"; // la fecha de fin
-      const idUsuario = 1;
-
-
-      axios.get(`http://localhost:3000/Fecha/${dia1}/${dia2}/${idUsuario}`)
-
-        .then((res) => {
-          console.log(res.data);
-        })
-
+  
+      // Calcula el primer día del mes
+      const primerDia = startOfMonth(newFecha1);
+      // Calcula el último día del mes
+      const ultimoDia = endOfMonth(newFecha1);
+  
+      const dia1 = format(primerDia, 'yyyy-MM-dd'); // Convierte el primer día a formato "yyyy-MM-dd"
+      const dia2 = format(ultimoDia, 'yyyy-MM-dd'); // Convierte el último día a formato "yyyy-MM-dd"
+      console.log("dia1 "+dia1);
+      console.log("dia2 "+dia2);
+      // Realiza la llamada a la API con las fechas calculadas
+      axios.get(`http://localhost:3000/Fecha/${dia1}/${dia2}/1`)
+      .then((res) => {
+        console.log(res.data); // Verifica las respuestas recibidas desde la API
+        //setPreguntas(...preguntas);
+        console.log(cantidadPorOrden);
+        setNewRespuesta(res.data);
+      })
+        .catch((error) => {
+          console.error('Error al hacer la llamada a la API:', error);
+        });
+        
+      setFecha1(newFecha1); // Actualiza la fecha en el estado
     } catch (error) {
-      console.log(res.data);
-      console.error('Error al hacer la llamada a la API:', error);
+      console.error('Error en la función cambiarMes:', error);
     }
   }
+  
   
   const handleButton = (idPregunta = 1) => {
     console.log("Entre a la funcion handleButton");
@@ -147,15 +147,12 @@ const VerHistorialMedico = () => {
           {preguntas.map((preguntita, index) => (
             <Pregunta
               key={preguntita.Id}
-              numAsk={counter + index}
+              numAsk={preguntita.Id} // counter + index
               ask={preguntita.Texto}
-              cant={cantidadPorOrden[preguntita.Id]}
+              cant={cantidadPorOrden[preguntita.Id]}//newRespuesta[preguntita.Id].CANTIDAD}//
               press={() => handleButton(preguntita.Id)}
             />
           ))}
-
-
-
         </ScrollView>
       </View>
 
