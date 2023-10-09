@@ -23,10 +23,8 @@ const VerHistorialMedico = () => {
   const [respuestaEspecifica, setRespuestaEspecifica] = useState([]);
   const [loading, setLoading] = useState(false);
   const [counter, setCounter] = useState(1); // Inicializa el contador en 1
-  const [newRespuesta,setNewRespuesta] = useState([
-    {
-
-    }]);
+  const [newRespuesta, setNewRespuesta] = useState([{}]);
+  const [firstLoading, setFirstLoading] = useState(false);
   //const [preguntaModal, setPreguntaModal] = useState();
   const meses = [
     { nro: 0, nombre: 'Enero' },
@@ -51,7 +49,7 @@ const VerHistorialMedico = () => {
     axios.get(`http://localhost:3000/Respuesta`)
       .then((res) => {
         setRespuesta(res.data);
-        
+
         /*const cantidadRespuestasPorOrden = {};
         res.data.forEach((item) => {
             if (item.Opcion) {
@@ -59,13 +57,14 @@ const VerHistorialMedico = () => {
             }
           });
           setCantidadPorOrden(cantidadRespuestasPorOrden);*/
-    })
+      })
+      .finally(setFirstLoading(true));
     cambiarMes();
   }, []);
 
   useEffect(() => {
     const cantidadRespuestasPorOrden = {};
-  
+
     respuesta.forEach((item) => {
       if (item.Opcion) {
         cantidadRespuestasPorOrden[item.Orden] = (cantidadRespuestasPorOrden[item.Orden] || 0) + 1;
@@ -74,47 +73,55 @@ const VerHistorialMedico = () => {
     setCantidadPorOrden(cantidadRespuestasPorOrden);
   }, [respuesta]);
 
-  const cambiarMes = async (cambio =null) => {
+  const cambiarMes = async (cambio = 'menor') => {
     try {
       let newFecha1 = new Date(fecha1);
-  
       if (cambio === "menor") {
         newFecha1.setMonth(newFecha1.getMonth() - 1);
-      } if(cambio ==="mayor") {
+      };
+      if (cambio === "mayor") {
         newFecha1.setMonth(newFecha1.getMonth() + 1);
       }
-  
+
       // Calcula el primer día del mes
       const primerDia = startOfMonth(newFecha1);
       // Calcula el último día del mes
       const ultimoDia = endOfMonth(newFecha1);
-  
+      console.log(primerDia);
+      console.log(ultimoDia);
       const dia1 = format(primerDia, 'yyyy-MM-dd'); // Convierte el primer día a formato "yyyy-MM-dd"
       const dia2 = format(ultimoDia, 'yyyy-MM-dd'); // Convierte el último día a formato "yyyy-MM-dd"
-      console.log("dia1 "+dia1);
-      console.log("dia2 "+dia2);
+      console.log("dia1 " + dia1);
+      console.log("dia2 " + dia2);
       // Realiza la llamada a la API con las fechas calculadas
       axios.get(`http://localhost:3000/Fecha/${dia1}/${dia2}/1`)
-      .then((res) => {
-        console.log(res.data); // Verifica las respuestas recibidas desde la API
-        //setPreguntas(...preguntas);
-        console.log(cantidadPorOrden);
-        setNewRespuesta(res.data);
-      })
+        .then((res) => {
+
+          console.log(res.data[0]); // Verifica las respuestas recibidas desde la API
+          //setPreguntas(...preguntas);
+
+          setNewRespuesta(res.data[0]);
+          setFirstLoading(true);
+        })
         .catch((error) => {
           console.error('Error al hacer la llamada a la API:', error);
-        });
-        
+        })
+
       setFecha1(newFecha1); // Actualiza la fecha en el estado
     } catch (error) {
       console.error('Error en la función cambiarMes:', error);
     }
   }
-  
-  
+
+
   const handleButton = (idPregunta = 1) => {
+    let newFecha1 = new Date(fecha1);
+    const primerDia = startOfMonth(newFecha1);
+    const ultimoDia = endOfMonth(newFecha1);
+    const dia1 = format(primerDia, 'yyyy-MM-dd');
+    const dia2 = format(ultimoDia, 'yyyy-MM-dd'); 
     console.log("Entre a la funcion handleButton");
-    axios.get(`http://localhost:3000/Respuesta/${idPregunta}`)
+    axios.get(`http://localhost:3000/Respuesta/${dia1}/${dia2}/${idPregunta}`)
       .then((res) => {
         console.log(res.data);
         setRespuestaEspecifica(res.data);
@@ -142,18 +149,26 @@ const VerHistorialMedico = () => {
         </View>
       </View>
       <View style={styles.divMedio}>
-        <ScrollView /* este wachin</View>contentContainerStyle={styles.divMedio}*/>
-          <Text style={styles.claseTextoDivMedio}>SELECCIONE EL NUMERO PARA MAS INFORMACION!</Text>
-          {preguntas.map((preguntita, index) => (
-            <Pregunta
-              key={preguntita.Id}
-              numAsk={preguntita.Id} // counter + index
-              ask={preguntita.Texto}
-              cant={cantidadPorOrden[preguntita.Id]}//newRespuesta[preguntita.Id].CANTIDAD}//
-              press={() => handleButton(preguntita.Id)}
-            />
-          ))}
+
+        <ScrollView >
+          {firstLoading != true ? (
+            <Text style={styles.claseTextoDivMedio}>Cargando...</Text>
+          ) : (
+            <React.Fragment >
+              <Text style={styles.claseTextoDivMedio}>SELECCIONE EL NUMERO PARA MAS INFORMACION!</Text>
+              {preguntas.map((preguntita, index) => (
+                <Pregunta
+                  key={`${newRespuesta[index]?.Id}_${index}`}
+                  numAsk={newRespuesta[index]?.Id || 1}
+                  ask={newRespuesta[index]?.TextoPregunta}
+                  cant={newRespuesta[index]?.CANTIDAD || 0}
+                  press={() => handleButton(newRespuesta[index]?.Id || 1)}
+                />
+              ))}
+            </React.Fragment>
+          )}
         </ScrollView>
+
       </View>
 
       {/* Modal */}
