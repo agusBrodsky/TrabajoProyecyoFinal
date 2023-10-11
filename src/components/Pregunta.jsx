@@ -3,6 +3,8 @@ import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-nati
 
 const Pregunta = ({ numAsk , ask = 'repete', cant = 0 , press }) => {
   return (
+    (ask == 'repete') ? 
+    <View></View> :
     <View style={styles.container}>
       <TouchableOpacity style={styles.touchableOpacity} onPress={press}>
         <Text style={styles.textClass}>{numAsk + "." + ask}</Text>
@@ -13,6 +15,7 @@ const Pregunta = ({ numAsk , ask = 'repete', cant = 0 , press }) => {
         </TouchableOpacity>
       </View>
     </View>
+
   );
 };
 
