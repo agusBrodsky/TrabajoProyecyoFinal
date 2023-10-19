@@ -106,6 +106,10 @@ const Formulario = () => {
         .then((res) => {
           console.log('Respuestas enviadas con éxito');
           veridicojeje = true;
+          navigation.reset({
+            index: 0, // Define el índice de la nueva pantalla en la pila (en este caso, la primera pantalla)
+            routes: [{ name: 'Home' }], // Agrega la nueva pantalla a la pila
+          }); 
         })
         .catch((error) => {
           console.log('Error al agregar las respuestas a la base de datos', error);

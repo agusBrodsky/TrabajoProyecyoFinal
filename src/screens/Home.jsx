@@ -1,15 +1,41 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Vibration } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Svg, { Circle } from 'react-native-svg'; // Importa Circle de react-native-svg
 import { useNavigation } from '@react-navigation/native';
+import { startOfMonth, endOfMonth } from 'date-fns';
+import { format } from 'date-fns'; // para cambiar un datetime a mas manero!!
+import { es } from 'date-fns/locale'; // Importa el objeto "es" para traducciones en español
+import axios from 'axios';
 
-const NavBar = ({ title }) => {
+const Home = ({ title }) => {
   const navigation = useNavigation();
+  
+  const [isButtonBlocked, setButtonBlocked] = useState(false);
 
+  const [formHecho,setForm] = useState(false);
+  
+  let textoForm = "Recuerda completar el diario del día";
+
+  const today = new Date();
+  const mañana = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+  useEffect(()=>{
+    const idUsuario = 1;
+    
+    const dia1 = format(today, 'yyyy-MM-dd');
+    axios.get(`http://localhost:3000/ValidarForm/${dia1}/${idUsuario}`)
+      .then((res) => {
+        setForm(res.data.valido);
+      })
+  }),[]
   const handleFormularioPress = () => {
     // Navegar a la pantalla "Formulario"
+    if (formHecho) {
+      console.log("Vibrationnn!!")
+      Vibration.vibrate(200);}
+      else{
     navigation.navigate('Formulario');
+      }
   };
 
   return (
@@ -22,7 +48,7 @@ const NavBar = ({ title }) => {
           </TouchableOpacity>
         </View>
       </View>
-      <Text style={styles.reminderText}>Recuerda completar el diario del día</Text>
+      <Text style={styles.reminderText}>{ (!formHecho) ? "Recuerda completar el diario del día" : "Formulario completado!"}</Text>
       <TouchableOpacity style={styles.button} onPress={handleFormularioPress}>
         <Text style={styles.buttonText}>Diario del día</Text>
       </TouchableOpacity>
@@ -165,4 +191,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NavBar;
+export default Home;

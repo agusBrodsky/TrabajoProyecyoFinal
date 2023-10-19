@@ -82,24 +82,15 @@ const VerHistorialMedico = () => {
       if (cambio === "mayor") {
         newFecha1.setMonth(newFecha1.getMonth() + 1);
       }
-
       // Calcula el primer día del mes
       const primerDia = startOfMonth(newFecha1);
       // Calcula el último día del mes
       const ultimoDia = endOfMonth(newFecha1);
-      console.log(primerDia);
-      console.log(ultimoDia);
       const dia1 = format(primerDia, 'yyyy-MM-dd'); // Convierte el primer día a formato "yyyy-MM-dd"
       const dia2 = format(ultimoDia, 'yyyy-MM-dd'); // Convierte el último día a formato "yyyy-MM-dd"
-      console.log("dia1 " + dia1);
-      console.log("dia2 " + dia2);
       // Realiza la llamada a la API con las fechas calculadas
       axios.get(`http://localhost:3000/Fecha/${dia1}/${dia2}/1`)
         .then((res) => {
-
-          console.log(res.data[0]); // Verifica las respuestas recibidas desde la API
-          //setPreguntas(...preguntas);
-
           setNewRespuesta(res.data[0]);
           setFirstLoading(true);
         })
@@ -142,7 +133,11 @@ const VerHistorialMedico = () => {
           <TouchableOpacity onPress={() => cambiarMes("menor")}>
             <Text style={styles.buttonText}>{'<'}</Text>
           </TouchableOpacity>
-          <Text style={styles.claseTexto}>{meses[fecha1.getMonth()].nombre}</Text>
+        
+          <View style={styles.dateContainer}><Text style={styles.claseTexto}>{meses[fecha1.getMonth()].nombre}</Text>
+          <Text style={styles.yearText}>{fecha1.getFullYear()}</Text>
+          </View>
+          
           <TouchableOpacity onPress={() => cambiarMes("mayor")}>
             <Text style={styles.buttonText}>{'>'}</Text>
           </TouchableOpacity>
@@ -292,6 +287,16 @@ const styles = StyleSheet.create({
   closeButtonText: {
     color: 'white',
     fontWeight: 'bold',
+  },
+  yearText: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  dateContainer: {
+    flexDirection: 'column', // Establece la disposición de los elementos hijos en columna
+    alignItems: 'center', // Alinea los elementos hijos en el centro horizontalmente
+    marginTop: 10, // Puedes ajustar el margen según tus necesidades
   },
 });
 

@@ -22,6 +22,7 @@ const Login = () => {
           //(res.data.message != "usuario no registrado!") ? navigation.navigate('Home', { user: obj });
           if(res.data.message != null)
           {
+            console.log("jaja si!!");
             navigation.navigate('Home');//,{ user});
           }
           
