@@ -1,41 +1,38 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Vibration } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import Svg, { Circle } from 'react-native-svg'; // Importa Circle de react-native-svg
+import Svg, { Circle } from 'react-native-svg';
 import { useNavigation } from '@react-navigation/native';
-import { startOfMonth, endOfMonth } from 'date-fns';
-import { format } from 'date-fns'; // para cambiar un datetime a mas manero!!
-import { es } from 'date-fns/locale'; // Importa el objeto "es" para traducciones en español
+import { format } from 'date-fns';
 import axios from 'axios';
 
 const Home = ({ title }) => {
   const navigation = useNavigation();
   
   const [isButtonBlocked, setButtonBlocked] = useState(false);
-
-  const [formHecho,setForm] = useState(false);
+  const [formHecho, setForm] = useState(false);
   
   let textoForm = "Recuerda completar el diario del día";
 
   const today = new Date();
-  const mañana = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-  useEffect(()=>{
+
+  useEffect(() => {
     const idUsuario = 1;
-    
     const dia1 = format(today, 'yyyy-MM-dd');
+    
     axios.get(`http://localhost:3000/ValidarForm/${dia1}/${idUsuario}`)
       .then((res) => {
         setForm(res.data.valido);
-      })
-  }),[]
+      });
+  }, []);
+
   const handleFormularioPress = () => {
-    // Navegar a la pantalla "Formulario"
     if (formHecho) {
-      console.log("Vibrationnn!!")
-      Vibration.vibrate(200);}
-      else{
-    navigation.navigate('Formulario');
-      }
+      console.log("Vibrationnn!!");
+      Vibration.vibrate(200);
+    } else {
+      navigation.navigate('Formulario');
+    }
   };
 
   return (
@@ -48,7 +45,9 @@ const Home = ({ title }) => {
           </TouchableOpacity>
         </View>
       </View>
-      <Text style={styles.reminderText}>{ (!formHecho) ? "Recuerda completar el diario del día" : "Formulario completado!"}</Text>
+      <Text style={styles.reminderText}>
+        {formHecho ? "Formulario completado!" : "Recuerda completar el diario del día"}
+      </Text>
       <TouchableOpacity style={styles.button} onPress={handleFormularioPress}>
         <Text style={styles.buttonText}>Diario del día</Text>
       </TouchableOpacity>
@@ -71,25 +70,27 @@ const Home = ({ title }) => {
           <Circle cx="75" cy="75" r="60" fill="#03C4D0" stroke="#0186A0" strokeWidth="2" />
         </Svg>
         <View style={styles.textContainer}>
-          <Text style={styles.timerText}>30</Text>
+          <Text style={styles.timerText2}>30</Text>
           <Text style={styles.timerLabel}>Minuto/s</Text>
         </View>
       </View>
 
-      {/* Línea divisoria */}
       <View style={styles.divider} />
-<View style={styles.fullWidthDivider} >
 
+      <Text style={styles.textBelowDivider}>A continuación</Text>
+     
+      <View style={styles.symptomsContainer}>
+        <Text style={styles.symptomsText}>Posibles síntomas motores</Text>
+        <Text style={styles.symptomsList}>1. Síntoma 1</Text>
+        <Text style={styles.symptomsList}>2. Síntoma 2</Text>
+        <Text style={styles.symptomsList}>3. Síntoma 3</Text>
+        <Text style={styles.symptomsList}>4. Síntoma 4</Text>
+      </View>
     </View>
-    </View>
-    
-    );
+  );
 };
 
 const handleProfilePress = () => {
-  // Aquí puedes navegar a la pantalla de perfil de la cuenta
-  // utilizando el sistema de navegación de tu aplicación
-  // por ejemplo, navigation.navigate('Profile');
 };
 
 const styles = StyleSheet.create({
@@ -145,19 +146,19 @@ const styles = StyleSheet.create({
   },
   circleLeft: {
     position: 'absolute',
-    top: 320, // Ajusta la posición vertical del círculo izquierdo
-    left: 100, // Ajusta la posición horizontal del círculo izquierdo
+    top: 320, 
+    left: 100, 
   },
   circleRight: {
     position: 'absolute',
-    top: 395, // Ajusta la posición vertical del círculo derecho
-    left: 170, // Ajusta la posición horizontal del círculo derecho
+    top: 395,
+    left: 170,
   },
   textContainer: {
     position: 'absolute',
     alignItems: 'center',
     justifyContent: 'center',
-    top: 35, // Ajusta la posición vertical del texto
+    top: 35, 
   },
   timerText: {
     position: 'absolute',
@@ -166,6 +167,14 @@ const styles = StyleSheet.create({
     color: 'white',
     textAlign: 'center',
     top: 5
+  },
+  timerText2: {
+    position: 'absolute',
+    fontSize: 35,
+    fontWeight: 'bold',
+    color: 'white',
+    textAlign: 'center',
+    top: -40
   },
   timerLabel: {
     position: 'absolute',
@@ -177,17 +186,34 @@ const styles = StyleSheet.create({
     height: 2,
     backgroundColor: "#03C4D0",
     marginHorizontal: 16,
-    top: 250 // Ajusta la posición vertical de la línea divisoria
+    top: 250, 
   },
-  fullWidthDivider: {
-    height: 2,
-    backgroundColor: "gray", // Color gris
-    marginHorizontal: 0, // Margen horizontal de 0 para ocupar todo el ancho
-    top: 280, // Ajusta la posición vertical de la línea divisoria inferior
-    shadowColor: 'black',
-    shadowOffset: { width: 0, height: 2 }, // Sombra hacia abajo
-    shadowOpacity: 0.2, // Opacidad de la sombra
-    shadowRadius: 3, // Radio de la sombra
+  textBelowDivider: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: 'black',
+    marginLeft: 20,
+    marginTop: 260
+  },
+  symptomsContainer: {
+    backgroundColor: "#F2F2F2",
+    borderRadius: 20,
+    padding: 10,
+    alignSelf: 'center',
+    marginTop: 25, 
+  },
+  symptomsText: {
+    fontSize: 15,
+    fontWeight: 'bold',
+    fontStyle: 'italic',
+    color: 'black',
+    textAlign: 'center',
+  },
+  symptomsList: {
+    fontSize: 14,
+    color: 'black',
+    marginLeft: 10,
+    marginTop: 5,
   },
 });
 
