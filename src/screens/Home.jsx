@@ -7,6 +7,9 @@ import { format } from 'date-fns';
 import axios from 'axios';
 import traerId from '../data/traerId.jsx';
 const Home = ({ route, title }) => {
+
+
+const Home = ({ title }) => {
   const navigation = useNavigation();
 
   const [isButtonBlocked, setButtonBlocked] = useState(false);
@@ -46,14 +49,13 @@ const Home = ({ route, title }) => {
     }
   };
 
+
+
   return (
     <View style={styles.container}>
       <View style={styles.navBar}>
-        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.titulo}>HOME</Text>
         <View style={styles.userIconContainer}>
-          <TouchableOpacity onPress={() => handleProfilePress()}>
-            <Icon name="user" size={30} color="black" />
-          </TouchableOpacity>
         </View>
       </View>
       <Text style={styles.reminderText}>
@@ -95,12 +97,23 @@ const Home = ({ route, title }) => {
       <Text style={styles.textBelowDivider}>A continuación</Text>
 
       <View style={styles.symptomsContainer}>
-        <Text style={styles.symptomsText}>Posibles síntomas motores</Text>
-        <Text style={styles.symptomsList}>1. Síntoma 1</Text>
-        <Text style={styles.symptomsList}>2. Síntoma 2</Text>
-        <Text style={styles.symptomsList}>3. Síntoma 3</Text>
-        <Text style={styles.symptomsList}>4. Síntoma 4</Text>
-      </View>
+        <Text style={styles.symptomsText}>Posibles síntomas</Text>
+      </View> 
+      
+      <Text style={styles.symptomsClass}>Motores</Text>
+        <Text style={styles.symptomsList}>• Temblor</Text>
+        <Text style={styles.symptomsList}>• Rigidez muscular</Text>
+        <Text style={styles.symptomsList}>• Akinesia</Text>
+        <Text style={styles.symptomsList}>• Alteración postural</Text>
+
+        <Text style={styles.NoMotorClass}>No Motores</Text>
+        
+        <View style={styles.symptomsContainerNO}>
+        <Text style={styles.symptomsNo}>• Fatiga</Text>
+        <Text style={styles.symptomsNo}>• Estreñimiento</Text>
+        <Text style={styles.symptomsNo}>• Ansiedad</Text>
+        <Text style={styles.symptomsNo}>• Depresión</Text>
+        </View> 
     </View>
   );
 };
@@ -121,10 +134,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     height: 100,
   },
-  title: {
+  titulo: {
     fontSize: 20,
     fontWeight: 'bold',
     color: 'white',
+    marginLeft: 160,
+    marginTop: 50
   },
   userIconContainer: {
     position: 'absolute',
@@ -189,7 +204,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'white',
     textAlign: 'center',
-    top: -40
+    top: 5
   },
   timerLabel: {
     position: 'absolute',
@@ -220,7 +235,7 @@ const styles = StyleSheet.create({
   symptomsText: {
     fontSize: 15,
     fontWeight: 'bold',
-    fontStyle: 'italic',
+  
     color: 'black',
     textAlign: 'center',
   },
@@ -229,7 +244,61 @@ const styles = StyleSheet.create({
     color: 'black',
     marginLeft: 10,
     marginTop: 5,
+    fontWeight:'bold',
   },
+  symptomsClass: {
+    backgroundColor: "#F2F2F2",
+    borderRadius: 20,
+    padding: 5,
+    fontSize: 16,
+    color: 'black',
+    marginLeft: 50,
+    marginTop: 10,
+    fontWeight:'bold',
+    width: 75,  
+    fontStyle: 'italic',
+    shadowColor: "black",
+    shadowOpacity: 0.5,
+    shadowRadius: 4,
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    }
+  },
+      NoMotorClass:  {
+      backgroundColor: "#F2F2F2",
+      bottom: 145,
+      right: 40,
+      fontStyle: 'italic',
+      position: 'absolute',
+      borderRadius: 20,
+      padding: 5,
+      paddingLeft: 5,
+      fontSize: 16,
+      color: 'black',
+      marginLeft: 50,
+      marginTop: 10,
+      fontWeight:'bold',
+      width: 100,
+      height: 30,
+      shadowColor: "black",
+      shadowOpacity: 0.5,
+      shadowRadius: 4,
+      shadowOffset: {
+        width: 0,
+        height: 3,
+      } 
+    },
+    symptomsContainerNO:{
+      position:'absolute',
+      bottom: 45,
+      right: 30, 
+    },
+    symptomsNo: { 
+   fontWeight: 'bold',
+   lineHeight: 24,
+    },
 });
+
 
 export default Home;
