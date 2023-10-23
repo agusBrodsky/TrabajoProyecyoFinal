@@ -8,9 +8,6 @@ const NavBar = ({ textoInicio = 'Home' }) => {
       <View style={styles.centerContainer}>
         <Text style={styles.claseTexto}>{textoInicio}</Text>
       </View>
-      <View style={styles.rightContainer}>
-        <Image style={styles.clasePerfil} source={IconPerfil} />
-      </View>
     </View>
   );
 };
@@ -25,8 +22,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   centerContainer: {
+    textAlign: 'center',
     flex: 1,
-    left:20,
     top:-10
   },
   claseTexto: {
