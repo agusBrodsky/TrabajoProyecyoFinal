@@ -14,8 +14,8 @@ const Formulario = () => {
   const [valorInput, setInput] = useState("");
   const [pip, setPip] = useState(true);
   const [IdForm, setIdForm] = useState();
-  const [idUser, setIdUser] = useState(1);  
-
+  const [idUser, setIdUser] = useState(1);
+  
   const handleInputChange = (value, id_r) => {
     setInput(value);
     actualizarTexto(id_r, value);
@@ -47,7 +47,7 @@ const Formulario = () => {
     }));
 
     const fechaActual = new Date(); // Obtiene la fecha y hora actual
-      console.log(texto);
+    console.log(texto);
     const nuevaRespuesta = {
       Id: null,
       TextoPregunta: texto,
@@ -55,7 +55,7 @@ const Formulario = () => {
       Texto: valorInput !== "" ? valorInput : null,
       IdParteCuerpo: null,
       Orden: id,
-      IdUsuario:idUser, // falta cambiar el user, por ahora siempre es 1
+      IdUsuario: idUser, // falta cambiar el user, por ahora siempre es 1
       Fecha: fechaActual.toISOString(),
     };
     verificarNoIguales(nuevaRespuesta);
@@ -76,7 +76,7 @@ const Formulario = () => {
       Texto: valorInput !== "" ? valorInput : null,
       IdParteCuerpo: null,
       Orden: id,
-      IdUsuario:idUser, // falta cambiar el user, por ahora siempre es 1
+      IdUsuario: idUser, // falta cambiar el user, por ahora siempre es 1
       Fecha: fechaActual.toISOString(), // Agrega la fecha actual en formato ISO
     };
     verificarNoIguales(nuevaRespuesta);
@@ -109,15 +109,15 @@ const Formulario = () => {
           navigation.reset({
             index: 0, // Define el índice de la nueva pantalla en la pila (en este caso, la primera pantalla)
             routes: [{ name: 'Home' }], // Agrega la nueva pantalla a la pila
-          }); 
+          });
         })
         .catch((error) => {
           console.log('Error al agregar las respuestas a la base de datos', error);
           veridicojeje = false;
         })
-      
+
     });
-    if(false){//if (pesatañaForm !== 2) {
+    if (false) {//if (pesatañaForm !== 2) {
       setPaginaForm(2);
       setTituloForm("EVALUACIÓN NO MOTORA");
     } else {
@@ -141,14 +141,14 @@ const Formulario = () => {
             <Text style={styles.clasePregunta}>{pregunta.Texto}</Text>
             {/*                                                         BOTONES                                                                                */}
             <View style={styles.claseBotonesContainer}>
-                <TouchableOpacity style={[styles.button, { backgroundColor: 'green' }]} onPress={() => onPressSi(pregunta.Id, pregunta.Texto)}>
-                  <Text style={styles.buttonText}>Si</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={[styles.button, { backgroundColor: 'red' }]} onPress={() => onPressNo(pregunta.Id, pregunta.Texto)}>
-                  <Text style={styles.buttonText}>No</Text>
-                </TouchableOpacity>
+              <TouchableOpacity style={[styles.button, { backgroundColor: 'green' }]} onPress={() => onPressSi(pregunta.Id, pregunta.Texto)}>
+                <Text style={styles.buttonText}>Si</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={[styles.button, { backgroundColor: 'red' }]} onPress={() => onPressNo(pregunta.Id, pregunta.Texto)}>
+                <Text style={styles.buttonText}>No</Text>
+              </TouchableOpacity>
             </View>
-            
+
             {segundaPregunta[pregunta.Id] && (
               <View style={styles.inputContainer}>
                 <Input id={pregunta.Id} placeholder={pregunta.preguntaHabilitada} onChange={handleInputChange} />

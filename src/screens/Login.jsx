@@ -6,38 +6,44 @@ import Input from '../components/Input';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 
+import { sign } from "react-native-pure-jwt";
+import { decode } from "react-native-pure-jwt";
+
 const Login = () => {
   const navigation = useNavigation();
-  const [user,setUser] = useState({Usuario:'',Password:'',Correo:''});
+  const [user, setUser] = useState({ Usuario: '', Password: '', Correo: '' });
   const windowsHeight = Dimensions.get('window').height;
   const windowsWidth = Dimensions.get('window').width;
   const height = (windowsHeight / 10) * 1.2;
+  const [userId, setUserId] = useState(null);
 
-  
+
 
   const funcionIniciarSesion = () => {
+    let userId = null;
     axios.post('http://localhost:3000/Usuario', user)
       .then((res) => {
         console.log(res.data.message);
-          //(res.data.message != "usuario no registrado!") ? navigation.navigate('Home', { user: obj });
-          if(res.data.message != null)
-          {
-            console.log("jaja si!!");
-            navigation.navigate('Home');//,{ user});
-          }
-          
+        console.log(res.data.Id);
+        const id = res.data.Id;
+        if (res.data.message != null) {
+          // Guardar el ID del usuario en el estado y en localStorage
+          setUserId(id);
+          localStorage.setItem('userId', id);
+          // Navegar a la pantalla Home
+          navigation.navigate('Home', { id: id });
+        }
       })
-      
       .catch(error => {
         console.log("usuario no logueado!")
         Alert.alert('usuario no logueado!');
       });
-      
+
 
     console.log(user);
   }
-  const validarUsuarioCorreo = ( value , id_r ="Usuario") => {
-    
+  const validarUsuarioCorreo = (value, id_r = "Usuario") => {
+
     let TOPE = 0;
     while (value.length > TOPE) {
       if (value[TOPE] === '@') {
@@ -47,7 +53,7 @@ const Login = () => {
         TOPE++;
       }
     }
-    handleInputChange(value,id_r);
+    handleInputChange(value, id_r);
   };
   const handleInputChange = (value, id_r = 'pass') => {
     console.log(id_r);
@@ -70,24 +76,24 @@ const Login = () => {
       }));
     }
   };
-  
-  
-  
+
+
+
   return (
     <View style={styles.container}>
       <ImageBackground source={ImLogin} resizeMode="cover" style={styles.imagenFondo}>
         <Image style={styles.claseLogo} source={Logo} />
         <View style={styles.inputContainer}>
 
-          <Input style={styles.textoUser} placeholder="Usuario o correo electrónico"  onChange={validarUsuarioCorreo}/>
-          <Input style={styles.textoUser} id_r="password" placeholder="Contraseña" onChange={handleInputChange} pass={true}/>
+          <Input style={styles.textoUser} placeholder="Usuario o correo electrónico" onChange={validarUsuarioCorreo} />
+          <Input style={styles.textoUser} id_r="password" placeholder="Contraseña" onChange={handleInputChange} pass={true} />
         </View>
         <View style={styles.claseBoton}>
           <TouchableOpacity onPress={() => funcionIniciarSesion()}>
             <Text style={styles.textoBoton}>Iniciar Sesión</Text>
           </TouchableOpacity>
         </View>
-        <View style={styles.textoRegister}>   
+        <View style={styles.textoRegister}>
           <Text style={styles.texto}>¿No tienes cuenta?</Text>
           <TouchableOpacity onPress={() => navigation.navigate('Register')}>
             <Text style={styles.textoLink}>Regístrate</Text>
@@ -114,7 +120,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 15,
     fontFamily: "sans-serif",
-    fontWeight: 'bold' 
+    fontWeight: 'bold'
   },
   textoUser: {
     textAlign: 'left',
@@ -137,7 +143,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontFamily: "sans-serif",
     textDecorationLine: 'underline',
-    marginLeft: 5, 
+    marginLeft: 5,
   },
   claseLogo: {
     width: 200,

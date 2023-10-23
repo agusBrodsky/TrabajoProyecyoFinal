@@ -5,24 +5,35 @@ import Svg, { Circle } from 'react-native-svg';
 import { useNavigation } from '@react-navigation/native';
 import { format } from 'date-fns';
 import axios from 'axios';
-
-const Home = ({ title }) => {
+import traerId from '../data/traerId.jsx';
+const Home = ({ route, title }) => {
   const navigation = useNavigation();
-  
+
   const [isButtonBlocked, setButtonBlocked] = useState(false);
   const [formHecho, setForm] = useState(false);
-  
+  const [id, setUserId] = useState(null);
   let textoForm = "Recuerda completar el diario del día";
 
   const today = new Date();
 
+
   useEffect(() => {
-    const idUsuario = 1;
+    // Obtener el ID del usuario desde localStorage
+    const storedUserId = localStorage.getItem('userId');
+    if (storedUserId) {
+      let p = traerId; // falta terminar esto !!! Y TAMBIEN HACER EL EDITAR DEL FORM 
+      setUserId(storedUserId);
+      console.log(p);
+    }
+  }, []);
+
+
+  useEffect(() => {
     const dia1 = format(today, 'yyyy-MM-dd');
-    
-    axios.get(`http://localhost:3000/ValidarForm/${dia1}/${idUsuario}`)
+    axios.get(`http://localhost:3000/ValidarForm/${dia1}/${id}`)
       .then((res) => {
-        setForm(res.data.valido);
+        //setForm(res.data.valido);
+        setForm(false);
       });
   }, []);
 
@@ -46,13 +57,17 @@ const Home = ({ title }) => {
         </View>
       </View>
       <Text style={styles.reminderText}>
-        {formHecho ? "Formulario completado!" : "Recuerda completar el diario del día"}
+        {formHecho ? "Formulario de hoy completado!" : "Recuerda completar el diario del día"}
       </Text>
-      <TouchableOpacity style={styles.button} onPress={handleFormularioPress}>
-        <Text style={styles.buttonText}>Diario del día</Text>
+      {formHecho ? "" : ''}
+      <TouchableOpacity
+        style={[styles.button, formHecho && styles.disabledButton]}  // Aplicar estilo adicional si formHecho es true
+        onPress={formHecho ? null : handleFormularioPress}  // Si formHecho es true, onPress será null
+        disabled={formHecho}  // Desactivar el botón cuando formHecho es true
+      >
+        <Text style={styles.buttonText}>{formHecho ? "Editar" : "Diario del día"}</Text>
       </TouchableOpacity>
       <Text style={styles.recordatorio}>Recuerda tomar tu medicación en</Text>
-      
       {/* Círculo izquierdo */}
       <View style={[styles.circleContainer, styles.circleLeft]}>
         <Svg height="150" width="150">
@@ -78,7 +93,7 @@ const Home = ({ title }) => {
       <View style={styles.divider} />
 
       <Text style={styles.textBelowDivider}>A continuación</Text>
-     
+
       <View style={styles.symptomsContainer}>
         <Text style={styles.symptomsText}>Posibles síntomas motores</Text>
         <Text style={styles.symptomsList}>1. Síntoma 1</Text>
@@ -146,8 +161,8 @@ const styles = StyleSheet.create({
   },
   circleLeft: {
     position: 'absolute',
-    top: 320, 
-    left: 100, 
+    top: 320,
+    left: 100,
   },
   circleRight: {
     position: 'absolute',
@@ -158,7 +173,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     alignItems: 'center',
     justifyContent: 'center',
-    top: 35, 
+    top: 35,
   },
   timerText: {
     position: 'absolute',
@@ -186,7 +201,7 @@ const styles = StyleSheet.create({
     height: 2,
     backgroundColor: "#03C4D0",
     marginHorizontal: 16,
-    top: 250, 
+    top: 250,
   },
   textBelowDivider: {
     fontSize: 18,
@@ -200,7 +215,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 10,
     alignSelf: 'center',
-    marginTop: 25, 
+    marginTop: 25,
   },
   symptomsText: {
     fontSize: 15,

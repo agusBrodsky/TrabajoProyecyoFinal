@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, Switch, TouchableOpacity } from 'react-native';
-import Input from '../components/Input'; 
-import Logo from '../../assets/logo.png'; 
+import Input from '../components/Input';
+import Logo from '../../assets/logo.png';
 import InputConOpciones from '../components/InputConOpciones';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
@@ -20,28 +20,30 @@ const Register = () => {
   const [recibirNotificaciones, setRecibirNotificaciones] = useState(false);
   const [aceptarTerminos, setAceptarTerminos] = useState(false);
 
+
   const handleInputChange = (value, id) => {
     setUser(prevUser => ({
       ...prevUser,
       [id]: value,
     }));
   };
-  const funcionIniciarSesion = ()=>{
-    axios.post('http://localhost:3000/Register', user)
-    .then((res) => {
-      console.log(res.data.message);
-        if(res.data.message != null)
-        {
-          navigation.navigate('Home');//,{ user:obj});
-        }  
-    })
-    .catch(error => {
-      console.log("usuario no registrado!")
-    });
-    
+  const funcionIniciarSesion = () => {
+    axios.post('http://localhost:3000/register', user)
+      .then((res) => {
+        if (res.data.Id != 0) {
+          const userId = res.data.Id;
+          console.log(`Usuario registrado correctamente con ID: ${userId}`);
+          navigation.navigate('Home');//,{ userId});
+        } else {
+          console.log('Error al registrar usuario');
+        }
+      })
+      .catch(error => {
+        console.log("Usuario no registrado!");
+      });
   }
   const genderOptions = [
-    {label:'',value:null},
+    { label: '', value: null },
     { label: 'Femenino', value: 'F' },
     { label: 'Masculino', value: 'M' },
     { label: 'Otro', value: 'Otro' },
@@ -52,7 +54,7 @@ const Register = () => {
         <Image style={styles.claseLogo} source={Logo} />
       </View>
       <View style={styles.inputContainer}>
-      <Input
+        <Input
           style={styles.textoUser}
           placeholder="Nombre"
           onChange={value => handleInputChange(value, 'Nombre')}
@@ -74,11 +76,11 @@ const Register = () => {
           onChange={value => handleInputChange(value, 'Password')}
         />
         <InputConOpciones
-        style={styles.textoUser}
-        placeholder="Sexo"
-        options={genderOptions}
-        onChange={value => handleInputChange(value, 'Sexo')}
-      />
+          style={styles.textoUser}
+          placeholder="Sexo"
+          options={genderOptions}
+          onChange={value => handleInputChange(value, 'Sexo')}
+        />
       </View>
       <View style={styles.checkboxContainer}>
         <View style={styles.opcionesContainer}>
@@ -103,12 +105,12 @@ const Register = () => {
       <TouchableOpacity style={styles.buttonContainer} onPress={() => funcionIniciarSesion()}>
         <Text style={styles.buttonText}>Registrarse</Text>
       </TouchableOpacity>
-      <View style={styles.textoRegister}>   
-          <Text style={styles.texto}>Ya tienes una cuenta?</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-            <Text style={styles.textoLink}>Inicia Sesion!😊</Text>
-          </TouchableOpacity>
-        </View>
+      <View style={styles.textoRegister}>
+        <Text style={styles.texto}>Ya tienes una cuenta?</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+          <Text style={styles.textoLink}>Inicia Sesion!😊</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -144,7 +146,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontFamily: "sans-serif",
     textDecorationLine: 'underline',
-    marginLeft: 5, 
+    marginLeft: 5,
   },
   claseLogo: {
     width: 100,
@@ -179,7 +181,7 @@ const styles = StyleSheet.create({
   textoIzquierda: {
     textAlign: 'left', // Texto alineado a la izquierda
   },
-  buttonContainer:{
+  buttonContainer: {
     position: 'absolute',
     paddingVertical: 15,
     alignSelf: 'center',
