@@ -7,7 +7,7 @@ import Perfil from './Perfil';
 
 const Tab = createBottomTabNavigator();
 
-export default function App() {
+export default function HomeNavigator() {
   return (
     <Tab.Navigator
       screenOptions={{ headerShown: false }}

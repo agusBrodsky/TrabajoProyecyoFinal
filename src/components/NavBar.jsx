@@ -1,12 +1,19 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image,Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Image,Dimensions,TouchableOpacity } from 'react-native';
 import IconPerfil from '../../assets/iconPerfil.png';
-
-const NavBar = ({ textoInicio = 'Home' }) => {
+import Icon from 'react-native-vector-icons/MaterialIcons';
+const NavBar = ({ title = 'Error', onBackPress }) => {
   return (
     <View style={styles.container}>
+      <TouchableOpacity onPress={onBackPress} style={styles.leftContainer}>
+      <Icon name="arrow-back" size={24} color="white" /> {/* Icono de flecha de retroceso */}
+        
+      </TouchableOpacity>
       <View style={styles.centerContainer}>
-        <Text style={styles.claseTexto}>{textoInicio}</Text>
+        <Text style={styles.claseTexto}>{title}</Text>
+      </View>
+      <View style={styles.rightContainer}>
+        {/* Agrega aquí cualquier otro contenido que desees en el lado derecho de la barra de navegación */}
       </View>
     </View>
   );
@@ -36,6 +43,9 @@ const styles = StyleSheet.create({
     top:-10,
     width: 25,
     height: 25,
+  },
+  leftContainer: {
+    top: -10,
   },
 });
 

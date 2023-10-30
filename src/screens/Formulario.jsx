@@ -4,7 +4,7 @@ import { Text, View, StyleSheet, ScrollView, Button, TouchableOpacity } from 're
 import Input from '../components/Input';
 import axios from 'axios';
 
-const Formulario = () => {
+const Formulario = ({ route, editar = true }) => {
   const navigation = useNavigation();
   const [segundaPregunta, setSegundaPregunta] = useState({}); // ARRAY RESPUESTAS
   const [preguntas, setPreguntas] = useState([]); // ARRAY DE PREGUNTAS INICIALES
@@ -14,12 +14,22 @@ const Formulario = () => {
   const [valorInput, setInput] = useState("");
   const [pip, setPip] = useState(true);
   const [IdForm, setIdForm] = useState();
-  const [idUser, setIdUser] = useState(1);
-  
+  const [id, setUserId] = useState(null);
+  const [selectedButtons, setSelectedButtons] = useState(Array(preguntas.length).fill(null));
+
+  useEffect(() => {
+    // Obtener el ID del usuario desde localStorage
+    const storedUserId = localStorage.getItem('userId');
+    if (storedUserId) {
+      setUserId(storedUserId);
+      console.log(storedUserId);
+    }
+  }, []);
+
   const handleInputChange = (value, id_r) => {
+    console.log(value,id_r);
     setInput(value);
     actualizarTexto(id_r, value);
-    console.log(arrayRespuestas);
   };
 
   function actualizarTexto(id, value) {
@@ -32,18 +42,62 @@ const Formulario = () => {
     setArrayRespuestas(actualizado);
   }
 
-  useEffect(() => {
+  useEffect(() => { // ESTE USE EFFECT TRAE LAS PREGUNTAS O LAS RESPUESTAS DEL FORM DEPENDE DEL CASO!!
+    if (editar) {
+      // Lógica para cargar las respuestas del formulario
+      // y actualizar el estado arrayRespuestas con esas respuestas.
+      console.log("entre jaja");
+      axios.get('http://localhost:3000/Respuesta')
+        .then((res) => {
+          console.log(res.data);
+          const respuestasGuardadas = res.data;
+          const respuestasArray = []; // Array para almacenar las respuestas cargadas desde la API.
+          const botonesSeleccionadosArray = Array(preguntas.length).fill(null); // Array para los botones seleccionados.
+
+          respuestasGuardadas.forEach((respuesta) => {
+            // Verificar la propiedad Opcion para determinar si la respuesta es "Sí" o "No".
+            if (respuesta.Opcion) {
+              respuestasArray.push(respuesta);
+              botonesSeleccionadosArray[respuesta.Orden] = 'si';
+              setSegundaPregunta((prevPreguntas) => ({
+                ...prevPreguntas,
+                [respuesta.Orden]: true,
+              }));
+              handleInputChange(respuesta.Texto,respuesta.Orden) // FALTA TERMINAR ESTO, ESTAMOS HACIENDO QUE SE EDITE UN FORMULARIO, Y TODA LA BOLA, FALTA QUE SE CARGUE EL TEXTO A LOS INPUTS  
+            } else {
+              respuestasArray.push(respuesta);
+              botonesSeleccionadosArray[respuesta.Orden] = 'no';
+              setSegundaPregunta((prevPreguntas) => ({
+                ...prevPreguntas,
+                [respuesta.Orden]: false,
+              }));
+            }
+          });
+
+          // Establecer el estado con las respuestas cargadas desde la API y los botones seleccionados.
+          setArrayRespuestas(respuestasArray);
+          setSelectedButtons(botonesSeleccionadosArray);
+        })
+        .catch((error) => {
+          console.error('Error al cargar las respuestas guardadas:', error);
+        });
+
+    }
+    else {
+
+    }
     axios.get('http://localhost:3000/Pregunta')
       .then((res) => {
+        console.log(res.data);
         const arrayPreguntas = res.data;
         setPreguntas(arrayPreguntas);
       });
   }, []);
 
-  const onPressSi = (id, texto) => {
+  const onPressSi = (idP, texto) => {
     setSegundaPregunta((prevPreguntas) => ({
       ...prevPreguntas,
-      [id]: true,
+      [idP]: true,
     }));
 
     const fechaActual = new Date(); // Obtiene la fecha y hora actual
@@ -54,19 +108,18 @@ const Formulario = () => {
       Opcion: 1,
       Texto: valorInput !== "" ? valorInput : null,
       IdParteCuerpo: null,
-      Orden: id,
-      IdUsuario: idUser, // falta cambiar el user, por ahora siempre es 1
+      Orden: idP,
+      IdUsuario: id, // falta cambiar el user, por ahora siempre es 1
       Fecha: fechaActual.toISOString(),
     };
     verificarNoIguales(nuevaRespuesta);
     setArrayRespuestas((prevRespuestas) => [...prevRespuestas, nuevaRespuesta]);
-    console.log(arrayRespuestas);
   };
   // -----------------------------------------------------                                                    ------------------------------------------------------------------------------------------------
-  const onPressNo = (id, texto) => {
+  const onPressNo = (idP, texto) => {
     setSegundaPregunta((prevPreguntas) => ({
       ...prevPreguntas,
-      [id]: false,
+      [idP]: false,
     }));
     const fechaActual = new Date(); // Obtiene la fecha y hora actual
     const nuevaRespuesta = {
@@ -75,8 +128,8 @@ const Formulario = () => {
       Opcion: 0,
       Texto: valorInput !== "" ? valorInput : null,
       IdParteCuerpo: null,
-      Orden: id,
-      IdUsuario: idUser, // falta cambiar el user, por ahora siempre es 1
+      Orden: idP,
+      IdUsuario: id, // falta cambiar el user, por ahora siempre es 1
       Fecha: fechaActual.toISOString(), // Agrega la fecha actual en formato ISO
     };
     verificarNoIguales(nuevaRespuesta);
@@ -100,24 +153,29 @@ const Formulario = () => {
     let veridicojeje = true;
     console.log("Continuar Form");
     console.log(arrayRespuestas);
-    arrayRespuestas.forEach((respuesta) => {
-      console.log(respuesta);
-      axios.post('http://localhost:3000/Respuesta', respuesta)
-        .then((res) => {
-          console.log('Respuestas enviadas con éxito');
-          veridicojeje = true;
-          navigation.reset({
-            index: 0, // Define el índice de la nueva pantalla en la pila (en este caso, la primera pantalla)
-            routes: [{ name: 'Home' }], // Agrega la nueva pantalla a la pila
-          });
-        })
-        .catch((error) => {
-          console.log('Error al agregar las respuestas a la base de datos', error);
-          veridicojeje = false;
-        })
+    if (editar) {
+      // Logica para hacer el UPDATE!!
+    }
+    else {
+      arrayRespuestas.forEach((respuesta) => {
+        console.log(respuesta);
+        axios.post('http://localhost:3000/Respuesta', respuesta)
+          .then((res) => {
+            console.log('Respuestas enviadas con éxito');
+            veridicojeje = true;
+            navigation.reset({
+              index: 0, // Define el índice de la nueva pantalla en la pila (en este caso, la primera pantalla)
+              routes: [{ name: 'Home' }],
+            });
+          })
+          .catch((error) => {
+            console.log('Error al agregar las respuestas a la base de datos', error);
+            veridicojeje = false;
+          })
 
-    });
-    if (false) {//if (pesatañaForm !== 2) {
+      });
+    }
+    if (false) {
       setPaginaForm(2);
       setTituloForm("EVALUACIÓN NO MOTORA");
     } else {
@@ -133,6 +191,8 @@ const Formulario = () => {
   }
 
   return (
+
+
     <View style={styles.container}>
       <Text style={styles.titulo}>{tituloForm}</Text>
       <ScrollView contentContainerStyle={styles.scrollViewContainer}>
@@ -141,10 +201,39 @@ const Formulario = () => {
             <Text style={styles.clasePregunta}>{pregunta.Texto}</Text>
             {/*                                                         BOTONES                                                                                */}
             <View style={styles.claseBotonesContainer}>
-              <TouchableOpacity style={[styles.button, { backgroundColor: 'green' }]} onPress={() => onPressSi(pregunta.Id, pregunta.Texto)}>
+              <TouchableOpacity
+                style={[
+                  styles.button,
+                  {
+                    backgroundColor: 'green',
+                    borderWidth: selectedButtons[pregunta.Id] === 'si' ? 2 : 0
+                  }
+                ]}
+                onPress={() => {
+                  const updatedButtons = [...selectedButtons];
+                  updatedButtons[pregunta.Id] = 'si';
+                  setSelectedButtons(updatedButtons);
+                  onPressSi(pregunta.Id, pregunta.Texto);
+                }}
+              >
                 <Text style={styles.buttonText}>Si</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={[styles.button, { backgroundColor: 'red' }]} onPress={() => onPressNo(pregunta.Id, pregunta.Texto)}>
+
+              <TouchableOpacity
+                style={[
+                  styles.button,
+                  {
+                    backgroundColor: 'red',
+                    borderWidth: selectedButtons[pregunta.Id] === 'no' ? 2 : 0
+                  }
+                ]}
+                onPress={() => {
+                  const updatedButtons = [...selectedButtons];
+                  updatedButtons[pregunta.Id] = 'no';
+                  setSelectedButtons(updatedButtons);
+                  onPressNo(pregunta.Id, pregunta.Texto);
+                }}
+              >
                 <Text style={styles.buttonText}>No</Text>
               </TouchableOpacity>
             </View>

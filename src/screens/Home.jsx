@@ -5,11 +5,9 @@ import Svg, { Circle } from 'react-native-svg';
 import { useNavigation } from '@react-navigation/native';
 import { format } from 'date-fns';
 import axios from 'axios';
-import traerId from '../data/traerId.jsx';
-const Home = ({ route, title }) => {
 
 
-const Home = ({ title }) => {
+const Home = ({ route, title = 'Error!'}) => {
   const navigation = useNavigation();
 
   const [isButtonBlocked, setButtonBlocked] = useState(false);
@@ -24,9 +22,7 @@ const Home = ({ title }) => {
     // Obtener el ID del usuario desde localStorage
     const storedUserId = localStorage.getItem('userId');
     if (storedUserId) {
-      let p = traerId; // falta terminar esto !!! Y TAMBIEN HACER EL EDITAR DEL FORM 
       setUserId(storedUserId);
-      console.log(p);
     }
   }, []);
 
@@ -45,7 +41,8 @@ const Home = ({ title }) => {
       console.log("Vibrationnn!!");
       Vibration.vibrate(200);
     } else {
-      navigation.navigate('Formulario');
+      navigation.navigate('Formulario',{id:id});
+
     }
   };
 
@@ -53,11 +50,7 @@ const Home = ({ title }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.navBar}>
-        <Text style={styles.titulo}>HOME</Text>
-        <View style={styles.userIconContainer}>
-        </View>
-      </View>
+      
       <Text style={styles.reminderText}>
         {formHecho ? "Formulario de hoy completado!" : "Recuerda completar el diario del día"}
       </Text>
