@@ -9,6 +9,8 @@ import Login from './src/screens/Login';
 import Register from './src/screens/Register';
 import VerHistorialMedico from './src/screens/VerHistorialMedico';
 import Perfil from './src/screens/Perfil';
+import Editar from './src/screens/Editar';
+import Agenda from './src/screens/Agenda';
 
 /*
 FIJATE TENER INSTALADO ESTO PARA PODER NAVEGAR ENTRE PESTAÑAS!!
@@ -28,9 +30,11 @@ const App = () => {
       <Stack.Screen name="Home" component={Home} /> 
       <Stack.Screen name="Perfil" component={Perfil} />
       <Stack.Screen name="Login" component={Login} />   
+      <Stack.Screen name="Editar" component={Editar} /> 
+      <Stack.Screen name="Agenda" component={Agenda} /> 
         <Stack.Screen name="Register" component={Register} />    
         <Stack.Screen name="Formulario" component={Formulario} />
-        <Stack.Screen name="VerHistorialMedico" component={VerHistorialMedico} />
+        <Stack.Screen name="VerHistorialMedico" component={VerHistorialMedico}/>
         
       </Stack.Navigator>
     </NavigationContainer>

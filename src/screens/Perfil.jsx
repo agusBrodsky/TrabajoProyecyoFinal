@@ -1,27 +1,40 @@
 import React from 'react';
-import { View, Text, Button, StyleSheet, Image } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 export default function Perfil() {
+  const navigation = useNavigation();
+
+  const goToHistorialMedico = () => {
+    navigation.navigate('VerHistorialMedico'); 
+  };
+  const goToEditar = () => {
+    navigation.navigate('Editar'); // Navega a la pantalla "Editar"
+  };
+
   return (
     <View style={styles.container}>
+      <View style={styles.navBar}>
+        <Text style={styles.titulo}>PERFIL</Text>
+      </View>
       <Image
         source={require('../../assets/logo.png')}
         style={styles.logo}
       />
-      <View style={styles.navBar}>
-        <Text style={styles.titulo}>PERFIL</Text>
-        <View style={styles.userIconContainer}>
-          {/* Agrega aquí cualquier contenido adicional que desees en la barra de navegación */}
-        </View>
-      </View>
+      <Text style={styles.userName}>Nombre del Usuario</Text>
       <View style={styles.contentContainer}>
-        <Text style={styles.title}>Mi Aplicación</Text>
-        <Button
-          title="Presiona el Botón"
-          onPress={() => {
-            // Agrega aquí la lógica que deseas ejecutar al presionar el botón
-          }}
-        />
+        <TouchableOpacity
+          style={styles.button}
+          onPress={goToHistorialMedico}
+        >
+          <Text style={styles.buttonText}>Ver Historial Médico</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button2}
+          onPress={goToEditar} 
+        >
+          <Text style={styles.buttonText}>Editar Perfil</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -30,13 +43,13 @@ export default function Perfil() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white', // Fondo blanco
+    backgroundColor: 'white',
   },
   logo: {
-    width: 200,
-    height: 50,
-    alignSelf: 'center', // Centrar el logo horizontalmente
-    marginTop: 200, // Ajustar el margen superior
+    width: 175,
+    height: 175,
+    alignSelf: 'center',
+    marginTop: 100,
   },
   navBar: {
     backgroundColor: "#03C4D0",
@@ -53,17 +66,42 @@ const styles = StyleSheet.create({
     marginLeft: 160,
     marginTop: 50,
   },
-  userIconContainer: {
-    // Estilos para el icono de usuario
-  },
   contentContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  title: {
-    fontSize: 24,
+  userName: {
+    fontSize: 25,
+    textAlign: 'center',
     fontWeight: 'bold',
-    marginBottom: 20,
+    fontStyle: 'italic',
+    marginTop: 30
+  },
+  button: {
+    backgroundColor: "#03C4D0",
+    width: 250,
+    borderRadius: 50,
+    paddingHorizontal: 40,
+    paddingVertical: 10,
+    alignSelf: 'center',
+    marginTop: 10,
+    bottom: 20
+  },
+  button2: {
+    backgroundColor: "#03C4D0",
+    width: 250,
+    borderRadius: 50,
+    paddingHorizontal: 40,
+    paddingVertical: 10,
+    alignSelf: 'center',
+    marginTop: 10,
+    bottom: 125 
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
 });

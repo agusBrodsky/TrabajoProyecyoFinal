@@ -7,7 +7,7 @@ import { format } from 'date-fns';
 import axios from 'axios';
 import traerId from '../data/traerId.jsx';
 
-const Home = ({ route }) => {  // Elimina "title" aquí ya que no se utiliza
+const Home = ({ route }) => {  
 
   const navigation = useNavigation();
 
