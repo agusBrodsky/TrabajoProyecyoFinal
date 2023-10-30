@@ -1,11 +1,15 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Home from './Home';
-import VerHistorialMedico from './VerHistorialMedico';
-import Icon from 'react-native-vector-icons/MaterialIcons'; // Importa la biblioteca de iconos que desees usar
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import Perfil from './Perfil';
+import VerHistorialMedico from './VerHistorialMedico';
+import Editar from './Editar';
+import Agenda from './Agenda'; 
 
 const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
 
 export default function HomeNavigator() {
   return (
@@ -13,10 +17,10 @@ export default function HomeNavigator() {
       screenOptions={{ headerShown: false }}
       tabBarOptions={{
         style: {
-          height: 80, // Ajusta la altura deseada
+          height: 80,
         },
         labelStyle: {
-          fontSize: 16, // Ajusta el tamaño de la fuente deseado
+          fontSize: 16,
         },
       }}
     >
@@ -25,19 +29,49 @@ export default function HomeNavigator() {
         component={Home}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Icon name="home" size={size} color={color} /> // Cambia "home" al nombre del icono que desees
+            <Icon name="home" size={size} color={color} />
           ),
         }}
       />
       <Tab.Screen
         name="Perfil"
-        component={Perfil}
+        component={PerfilStack}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Icon name="person" size={size} color={color} /> // Cambia "person" al nombre del icono que desees
+            <Icon name="person" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Agenda"
+        component={Agenda}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Icon name="date-range" size={size} color={color} />
           ),
         }}
       />
     </Tab.Navigator>
   );
 }
+
+function PerfilStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Perfil"
+        component={Perfil}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="VerHistorialMedico"
+        component={VerHistorialMedico}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Editar"
+        component={Editar}
+        options={{ headerShown: false }}
+      />
+    </Stack.Navigator>
+)}

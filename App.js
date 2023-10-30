@@ -9,8 +9,20 @@ import Login from './src/screens/Login';
 import Register from './src/screens/Register';
 import VerHistorialMedico from './src/screens/VerHistorialMedico';
 import Perfil from './src/screens/Perfil';
+<<<<<<< HEAD
 import Home from './src/screens/Home';
 import NavBar from './src/components/NavBar'; // Importa tu componente NavBar
+=======
+import Editar from './src/screens/Editar';
+import Agenda from './src/screens/Agenda';
+
+/*
+FIJATE TENER INSTALADO ESTO PARA PODER NAVEGAR ENTRE PESTAÑAS!!
+npm install @react-navigation/native
+npm install react-native-reanimated react-native-gesture-handler react-native-screens react-native-safe-area-context @react-native-community/masked-view
+npm install @react-navigation/stack
+*/
+>>>>>>> 9468c85c16ffb975b30f3de9a139606a2dae60ed
 const Stack = createStackNavigator();
 
 const handleBackPress = () => {
@@ -19,6 +31,7 @@ const handleBackPress = () => {
 const App = () => {
   return (
     <NavigationContainer fallback>
+<<<<<<< HEAD
       <Stack.Navigator>
       <Stack.Screen
           name="Home"
@@ -27,6 +40,18 @@ const App = () => {
             header: ({ navigation }) => <NavBar title="Home" onBackPress={handleBackPress} />,
           }}
         />
+=======
+
+      <Stack.Navigator screenOptions={{ headerShown: false }}>     
+      <Stack.Screen name="Home" component={Home} /> 
+      <Stack.Screen name="Perfil" component={Perfil} />
+      <Stack.Screen name="Login" component={Login} />   
+      <Stack.Screen name="Editar" component={Editar} /> 
+      <Stack.Screen name="Agenda" component={Agenda} /> 
+        <Stack.Screen name="Register" component={Register} />    
+        <Stack.Screen name="Formulario" component={Formulario} />
+        <Stack.Screen name="VerHistorialMedico" component={VerHistorialMedico}/>
+>>>>>>> 9468c85c16ffb975b30f3de9a139606a2dae60ed
         
       <Stack.Screen
           name="HomeNavigator"

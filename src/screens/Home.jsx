@@ -5,6 +5,7 @@ import Svg, { Circle } from 'react-native-svg';
 import { useNavigation } from '@react-navigation/native';
 import { format } from 'date-fns';
 import axios from 'axios';
+import traerId from '../data/traerId.jsx';
 
 
 const Home = ({ route, title = 'Error!'}) => {
@@ -17,7 +18,6 @@ const Home = ({ route, title = 'Error!'}) => {
 
   const today = new Date();
 
-
   useEffect(() => {
     // Obtener el ID del usuario desde localStorage
     const storedUserId = localStorage.getItem('userId');
@@ -25,7 +25,6 @@ const Home = ({ route, title = 'Error!'}) => {
       setUserId(storedUserId);
     }
   }, []);
-
 
   useEffect(() => {
     const dia1 = format(today, 'yyyy-MM-dd');
@@ -45,8 +44,6 @@ const Home = ({ route, title = 'Error!'}) => {
 
     }
   };
-
-
 
   return (
     <View style={styles.container}>
@@ -94,24 +91,21 @@ const Home = ({ route, title = 'Error!'}) => {
       </View> 
       
       <Text style={styles.symptomsClass}>Motores</Text>
-        <Text style={styles.symptomsList}>• Temblor</Text>
-        <Text style={styles.symptomsList}>• Rigidez muscular</Text>
-        <Text style={styles.symptomsList}>• Akinesia</Text>
-        <Text style={styles.symptomsList}>• Alteración postural</Text>
+      <Text style={styles.symptomsList}>• Temblor</Text>
+      <Text style={styles.symptomsList}>• Rigidez muscular</Text>
+      <Text style={styles.symptomsList}>• Akinesia</Text>
+      <Text style={styles.symptomsList}>• Alteración postural</Text>
 
-        <Text style={styles.NoMotorClass}>No Motores</Text>
+      <Text style={styles.NoMotorClass}>No Motores</Text>
         
-        <View style={styles.symptomsContainerNO}>
+      <View style={styles.symptomsContainerNO}>
         <Text style={styles.symptomsNo}>• Fatiga</Text>
         <Text style={styles.symptomsNo}>• Estreñimiento</Text>
         <Text style={styles.symptomsNo}>• Ansiedad</Text>
         <Text style={styles.symptomsNo}>• Depresión</Text>
-        </View> 
+      </View> 
     </View>
   );
-};
-
-const handleProfilePress = () => {
 };
 
 const styles = StyleSheet.create({
@@ -228,7 +222,6 @@ const styles = StyleSheet.create({
   symptomsText: {
     fontSize: 15,
     fontWeight: 'bold',
-  
     color: 'black',
     textAlign: 'center',
   },
@@ -237,7 +230,7 @@ const styles = StyleSheet.create({
     color: 'black',
     marginLeft: 10,
     marginTop: 5,
-    fontWeight:'bold',
+    fontWeight: 'bold',
   },
   symptomsClass: {
     backgroundColor: "#F2F2F2",
@@ -247,8 +240,8 @@ const styles = StyleSheet.create({
     color: 'black',
     marginLeft: 50,
     marginTop: 10,
-    fontWeight:'bold',
-    width: 75,  
+    fontWeight: 'bold',
+    width: 75,
     fontStyle: 'italic',
     shadowColor: "black",
     shadowOpacity: 0.5,
@@ -258,40 +251,39 @@ const styles = StyleSheet.create({
       height: 3,
     }
   },
-      NoMotorClass:  {
-      backgroundColor: "#F2F2F2",
-      bottom: 145,
-      right: 40,
-      fontStyle: 'italic',
-      position: 'absolute',
-      borderRadius: 20,
-      padding: 5,
-      paddingLeft: 5,
-      fontSize: 16,
-      color: 'black',
-      marginLeft: 50,
-      marginTop: 10,
-      fontWeight:'bold',
-      width: 100,
-      height: 30,
-      shadowColor: "black",
-      shadowOpacity: 0.5,
-      shadowRadius: 4,
-      shadowOffset: {
-        width: 0,
-        height: 3,
-      } 
-    },
-    symptomsContainerNO:{
-      position:'absolute',
-      bottom: 45,
-      right: 30, 
-    },
-    symptomsNo: { 
-   fontWeight: 'bold',
-   lineHeight: 24,
-    },
+  NoMotorClass: {
+    backgroundColor: "#F2F2F2",
+    bottom: 145,
+    right: 40,
+    fontStyle: 'italic',
+    position: 'absolute',
+    borderRadius: 20,
+    padding: 5,
+    paddingLeft: 5,
+    fontSize: 16,
+    color: 'black',
+    marginLeft: 50,
+    marginTop: 10,
+    fontWeight: 'bold',
+    width: 100,
+    height: 30,
+    shadowColor: "black",
+    shadowOpacity: 0.5,
+    shadowRadius: 4,
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    }
+  },
+  symptomsContainerNO: {
+    position: 'absolute',
+    bottom: 45,
+    right: 30,
+  },
+  symptomsNo: {
+    fontWeight: 'bold',
+    lineHeight: 24,
+  },
 });
-
 
 export default Home;
