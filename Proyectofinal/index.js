@@ -81,6 +81,7 @@ app.post('/Lista',async(req,res)=>{
 app.get('/Fecha/:Dia1/:Dia2/:IdUsuario',async(req,res)=>{ 
     console.log(req.params);
     const Respuesta = await RespuestaServices.getCount(req.params.Dia1,req.params.Dia2,req.params.IdUsuario)
+    console.log(Respuesta);
     res.status(200).send(Respuesta)
 })
 app.get('/Respuesta/:Dia1/:Dia2/:idPregunta',async(req,res)=>{

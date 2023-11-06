@@ -43,6 +43,7 @@ const VerHistorialMedico = () => {
   useEffect(() => {
     axios.get(`http://localhost:3000/Pregunta`)
       .then((res) => {
+        console.log(res.data);
         setPreguntas(res.data);
       });
     //---------------------------------------------------------------------------------------------------------------------------------------
@@ -89,6 +90,8 @@ const VerHistorialMedico = () => {
       const dia1 = format(primerDia, 'yyyy-MM-dd'); // Convierte el primer día a formato "yyyy-MM-dd"
       const dia2 = format(ultimoDia, 'yyyy-MM-dd'); // Convierte el último día a formato "yyyy-MM-dd"
       // Realiza la llamada a la API con las fechas calculadas
+      console.log(dia1);
+      console.log(dia2);
       axios.get(`http://localhost:3000/Fecha/${dia1}/${dia2}/1`)
         .then((res) => {
           setNewRespuesta(res.data[0]);
