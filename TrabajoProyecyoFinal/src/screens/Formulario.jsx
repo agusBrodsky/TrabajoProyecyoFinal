@@ -14,9 +14,9 @@ const Formulario = ({ route, editar = true }) => {
   const [valorInput, setInput] = useState("");
   const [pip, setPip] = useState(true);
   const [IdForm, setIdForm] = useState();
-  const [id, setUserId] = useState(null);
+  const [idUser, setUserId] = useState(null);
   const [selectedButtons, setSelectedButtons] = useState(Array(preguntas.length).fill(null));
-
+  const [respEditar, setRespEditar] = useState(null);
   useEffect(() => {
     // Obtener el ID del usuario desde localStorage
     const storedUserId = localStorage.getItem('userId');
@@ -25,7 +25,7 @@ const Formulario = ({ route, editar = true }) => {
       console.log(storedUserId);
     }
   }, []);
-
+  
   const handleInputChange = (value, id_r) => {
     console.log(value,id_r);
     setInput(value);
@@ -46,10 +46,19 @@ const Formulario = ({ route, editar = true }) => {
     if (editar) {
       // Lógica para cargar las respuestas del formulario
       // y actualizar el estado arrayRespuestas con esas respuestas.
-      console.log("entre jaja");
-      axios.get('http://localhost:3000/Respuesta')
+      console.log("estas en edit!!");
+      
+        const fechaActual = new Date();
+        const año = fechaActual.getFullYear();
+        const mes = fechaActual.getMonth() + 1;
+        const dia = fechaActual.getDate();
+        const fechaFormateada = `${año}-${mes < 10 ? '0' : ''}${mes}-${dia < 10 ? '0' : ''}${dia}`;
+
+      axios.get('http://localhost:3000/getLastRespuesta/${Fecha}/${idUser}')
         .then((res) => {
-          console.log(res.data);
+          console.log(res.data); 
+          setRespEditar(res.data);
+          
           const respuestasGuardadas = res.data;
           const respuestasArray = []; // Array para almacenar las respuestas cargadas desde la API.
           const botonesSeleccionadosArray = Array(preguntas.length).fill(null); // Array para los botones seleccionados.
@@ -109,7 +118,7 @@ const Formulario = ({ route, editar = true }) => {
       Texto: valorInput !== "" ? valorInput : null,
       IdParteCuerpo: null,
       Orden: idP,
-      IdUsuario: id, // falta cambiar el user, por ahora siempre es 1
+      IdUsuario: idUser, // falta cambiar el user, por ahora siempre es 1
       Fecha: fechaActual.toISOString(),
     };
     verificarNoIguales(nuevaRespuesta);
@@ -129,7 +138,7 @@ const Formulario = ({ route, editar = true }) => {
       Texto: valorInput !== "" ? valorInput : null,
       IdParteCuerpo: null,
       Orden: idP,
-      IdUsuario: id, // falta cambiar el user, por ahora siempre es 1
+      IdUsuario: idUser, // falta cambiar el user, por ahora siempre es 1
       Fecha: fechaActual.toISOString(), // Agrega la fecha actual en formato ISO
     };
     verificarNoIguales(nuevaRespuesta);
@@ -154,6 +163,7 @@ const Formulario = ({ route, editar = true }) => {
     console.log("Continuar Form");
     console.log(arrayRespuestas);
     if (editar) {
+      console.log("estamos en actualizar!!");
       // Logica para hacer el UPDATE!!
     }
     else {

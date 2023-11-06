@@ -111,5 +111,21 @@ static insertJ = async (listaR) =>
 
   listaR.map(o => this.insert(o));
 }
+static getLastRespuesta = async (Fecha, idUsuario) =>
+{
+    let returnEntity = null;
+    console.log('Estoy en: RespuestaServices.getLastRespuesta(Fecha,idUsuario)');
+    try
+    {
+        let pool = await sql.connect(config);
+        let result = await pool.request()
+        .query(`SELECT * FROM Respuesta WHERE Fecha = '2023-11-06' `);
+        console.log(result.recordsets[0]);
+        return result.recordsets[0];
+    }
+    catch(error){
+        console.log(error);
+    }
+}
 
 }

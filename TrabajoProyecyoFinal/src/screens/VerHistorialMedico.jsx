@@ -129,7 +129,6 @@ const VerHistorialMedico = () => {
 
   return (
     <View style={styles.container}>
-      <NavBar textoInicio="Historial Medico" />
       <Image style={styles.claseLogo} source={Logo} />
       <View style={styles.buttonContainer}>
         <View style={styles.button}>

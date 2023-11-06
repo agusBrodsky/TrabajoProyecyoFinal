@@ -139,6 +139,7 @@ app.post('/register', async (req, res) => {
   
 app.get('/ValidarForm/:dia1/:idUsuario', async (req, res) => {
     console.log("llegue a validarForm!!");
+    (req.params.idUsuario) ? console.log("falta hacer el login!!") : {}
     const valido = await FormServices.validar(req.params.dia1, req.params.idUsuario);
     console.log("valido");
     if (valido) {
@@ -177,8 +178,18 @@ app.post('/agMed', async (req, res) => {
       res.status(500).send({'message': 'medicacion no insertada'});
     }
   });
-
-
+app.get('/getLastRespuesta/:Fecha/:idUsuario', async (req,res)=>{
+    console.log("llegue a getLastRespuesta")
+    try{
+        const Respuestas = await RespuestaServices.getLastRespuesta(req.params.Fecha,req.params.idUsuario)
+        res.status(200).send(Respuestas)
+    }
+    catch(error){
+        console.log(req.params.Fecha,req.params.idUsuario)
+        console.log("error");
+        res.status(500).send({'message': 'error al traer las respuestas para editar!'})
+    }
+})
 app.listen(port, () =>
 {
     console.log("escucho");
