@@ -10,8 +10,7 @@ import { RespuestaServices } from './services/RespuestaServices.js';
 import { MedicacionServices } from './services/MedicacionServices.js';
 import { FormServices } from './services/FormServices.js';
 import {UsuarioServices} from './services/UsuarioServices.js';
-import {CitaServices} from './services/CitaServices';
-
+import {citaServices} from './services/CitaServices.js';
 import Medicacion from './models/Medicacion.js';
 import Respuesta from './models/Respuesta.js';
 import ParteCuerpo from './models/ParteCuerpo.js';
