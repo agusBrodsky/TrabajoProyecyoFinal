@@ -46,6 +46,27 @@ export default function Agenda() {
   const [appointmentSubject, setAppointmentSubject] = useState('');
   const [appointmentNotes, setAppointmentNotes] = useState('');
 
+  const allPossibleHours = [
+    '06:00 AM',
+    '07:00 AM',
+    '08:00 AM',
+    '09:00 AM',
+    '10:00 AM',
+    '11:00 AM',
+    '12:00 PM',
+    '01:00 PM',
+    '02:00 PM',
+    '03:00 PM',
+    '04:00 PM',
+    '05:00 PM',
+    '06:00 PM',
+    '07:00 PM',
+    '08:00 PM',
+    '09:00 PM',
+    '10:00 PM',
+    // Agrega más horas si es necesario
+  ];
+
   // Función para cambiar de mes
   const changeMonth = (newMonth) => {
     setCurrentMonth(newMonth.dateString);
@@ -75,9 +96,6 @@ export default function Agenda() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.navBar}>
-        <Text style={styles.titulo}>AGENDA</Text>
-      </View>
       <View style={styles.circleContainer}>
         <Svg height="150" width="150">
           <Circle cx="75" cy="75" r="60" fill="#03C4D0" stroke="#0186A0" strokeWidth={2} />
@@ -108,11 +126,9 @@ export default function Agenda() {
                 style={styles.timePicker}
                 onValueChange={(itemValue) => setAppointmentTime(itemValue)}
               >
-                <Picker.Item label="08:00 AM" value="08:00 AM" />
-                <Picker.Item label="09:00 AM" value="09:00 AM" />
-                <Picker.Item label="10:00 AM" value="10:00 AM" />
-                <Picker.Item label="11:00 AM" value="11:00 AM" />
-                {/* Agrega más opciones según tus necesidades */}
+                {allPossibleHours.map((hour, index) => (
+                  <Picker.Item key={index} label={hour} value={hour} />
+                ))}
               </Picker>
             </View>
             <TextInput
@@ -154,19 +170,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
-  },
-  navBar: {
-    backgroundColor: '#03C4D0',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    height: 100,
-  },
-  titulo: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: 'white',
   },
   circleContainer: {
     alignItems: 'center',
@@ -239,9 +242,6 @@ const styles = StyleSheet.create({
   timePicker: {
     flex: 1,
     height: 40,
-  },
-  clockIcon: {
-    fontSize: 20,
   },
   input: {
     width: '100%',

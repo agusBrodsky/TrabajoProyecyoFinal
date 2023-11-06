@@ -29,13 +29,11 @@ const App = () => {
   return (
 
     <NavigationContainer fallback>
-      <Stack.Navigator>
-    
-      <Stack.Screen
+      <Stack.Navigator><Stack.Screen
           name="HomeNavigator"
           component={HomeNavigator}
           options={{
-            header: ({ navigation }) => <NavBar title="HomeNavigator" onBackPress={handleBackPress} />,
+            header: ({ navigation }) => <NavBar title="Home" onBackPress={handleBackPress} />,
           }}
         />
       <Stack.Screen
@@ -46,7 +44,7 @@ const App = () => {
           }}
         />
         
-     
+      
         <Stack.Screen
           name="Formulario"
           component={Formulario}

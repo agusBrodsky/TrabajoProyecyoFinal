@@ -163,12 +163,12 @@ const styles = StyleSheet.create({
   },
   circleLeft: {
     position: 'absolute',
-    top: 320,
+    top: 210,
     left: 100,
   },
   circleRight: {
     position: 'absolute',
-    top: 395,
+    top: 290,
     left: 170,
   },
   textContainer: {
