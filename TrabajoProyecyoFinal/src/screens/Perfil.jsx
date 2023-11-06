@@ -14,9 +14,6 @@ export default function Perfil() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.navBar}>
-        <Text style={styles.titulo}>PERFIL</Text>
-      </View>
       <Image
         source={require('../../assets/logo.png')}
         style={styles.logo}
