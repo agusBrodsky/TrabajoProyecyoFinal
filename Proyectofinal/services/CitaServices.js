@@ -1,6 +1,6 @@
 import {config} from '../dbconfig.js';
 import sql from 'mssql';
-export class CitaServices
+export class citaServices
 {
     static insert = async (Cita) =>
     {
