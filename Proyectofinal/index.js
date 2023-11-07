@@ -178,16 +178,28 @@ app.post('/agMed', async (req, res) => {
       res.status(500).send({'message': 'medicacion no insertada'});
     }
   });
-app.get('/getLastRespuesta/:Fecha/:idUsuario', async (req,res)=>{
-    console.log("llegue a getLastRespuesta")
+app.get('/getLastRespuesta/:Fecha/:idUsuario', async (req,res)=>{ // FUNCION QUE TRAE EL ULTIMO FORMULARIO EN CASO DE QUE ESTE RESUELTO!!
+    console.log("llegue a getLastRespuesta");
     try{
-        const Respuestas = await RespuestaServices.getLastRespuesta(req.params.Fecha,req.params.idUsuario)
+        //const Respuestas = await RespuestaServices.getLastRespuesta(req.params.Fecha,req.params.idUsuario)
+        const Respuestas = null;
         res.status(200).send(Respuestas)
     }
     catch(error){
         console.log(req.params.Fecha,req.params.idUsuario)
         console.log("error");
         res.status(500).send({'message': 'error al traer las respuestas para editar!'})
+    }
+})
+app.put('/RespuestaUpdate', async (req,res)=>{
+    console.log("estoy en backend /respuestaUpdate");
+    try{
+        const updateHecho = await RespuestaServices.update(req.body)
+        res.status(200).send(Respuestas)
+    }
+    catch(error){
+        console.log(error);
+        res.status(500).send({'message': 'error al hacer el update!'})
     }
 })
 app.listen(port, () =>

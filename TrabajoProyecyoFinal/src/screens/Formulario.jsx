@@ -109,7 +109,7 @@ const Formulario = ({ route, editar = true }) => {
       [idP]: true,
     }));
 
-    const fechaActual = new Date(); // Obtiene la fecha y hora actual
+    const fechaActual = new Date(); 
     console.log(texto);
     const nuevaRespuesta = {
       Id: null,
@@ -118,7 +118,7 @@ const Formulario = ({ route, editar = true }) => {
       Texto: valorInput !== "" ? valorInput : null,
       IdParteCuerpo: null,
       Orden: idP,
-      IdUsuario: idUser, // falta cambiar el user, por ahora siempre es 1
+      IdUsuario: idUser, 
       Fecha: fechaActual.toISOString(),
     };
     verificarNoIguales(nuevaRespuesta);
@@ -130,7 +130,7 @@ const Formulario = ({ route, editar = true }) => {
       ...prevPreguntas,
       [idP]: false,
     }));
-    const fechaActual = new Date(); // Obtiene la fecha y hora actual
+    const fechaActual = new Date();
     const nuevaRespuesta = {
       Id: null,
       TextoPregunta: texto,
@@ -138,17 +138,17 @@ const Formulario = ({ route, editar = true }) => {
       Texto: valorInput !== "" ? valorInput : null,
       IdParteCuerpo: null,
       Orden: idP,
-      IdUsuario: idUser, // falta cambiar el user, por ahora siempre es 1
-      Fecha: fechaActual.toISOString(), // Agrega la fecha actual en formato ISO
+      IdUsuario: idUser, 
+      Fecha: fechaActual.toISOString(), 
     };
     verificarNoIguales(nuevaRespuesta);
     setArrayRespuestas((prevRespuestas) => [...prevRespuestas, nuevaRespuesta]);
     console.log(arrayRespuestas);
   };
-  const verificarNoIguales = (nuevaRespuesta) => {
+
+  const verificarNoIguales = (nuevaRespuesta) => { // Funcion para chequear que no haya repetidos!
     setArrayRespuestas((prevRespuestas) => {
       return prevRespuestas.filter((respuesta) => {
-        // Compare the properties that need to be unique for each response
         return respuesta.Orden !== nuevaRespuesta.Orden &&
           respuesta.TextoPregunta !== nuevaRespuesta.TextoPregunta;
       });
@@ -158,25 +158,31 @@ const Formulario = ({ route, editar = true }) => {
 
     })
   }
+  const updateRespuestas = ()=>{
+    axios.put('http://localhost:3000/RespuestaUpdate/', arrayRespuestas)
+    .then((res)=>{
+      console.log("listo!!");
+      console.log(res.data);
+    })
+    .catch((error)=>{
+      console.log(error);
+    })
+  }
   const continuarForm = () => {
     let veridicojeje = true;
     console.log("Continuar Form");
     console.log(arrayRespuestas);
-    if (editar) {
-      console.log("estamos en actualizar!!");
-      // Logica para hacer el UPDATE!!
+    if (editar) { // hace el update y actualiza las respuestas 
+      console.log("estamos en edit!!");
+      updateRespuestas();
     }
-    else {
+    else { // agrega las respuestas a la bdd 
       arrayRespuestas.forEach((respuesta) => {
-        console.log(respuesta);
+        console.log("las respuestas " +respuesta);
         axios.post('http://localhost:3000/Respuesta', respuesta)
           .then((res) => {
             console.log('Respuestas enviadas con éxito');
             veridicojeje = true;
-            navigation.reset({
-              index: 0, // Define el índice de la nueva pantalla en la pila (en este caso, la primera pantalla)
-              routes: [{ name: 'Home' }],
-            });
           })
           .catch((error) => {
             console.log('Error al agregar las respuestas a la base de datos', error);
@@ -185,11 +191,14 @@ const Formulario = ({ route, editar = true }) => {
 
       });
     }
-    if (false) {
+    if (false) { // burocracia!
       setPaginaForm(2);
       setTituloForm("EVALUACIÓN NO MOTORA");
     } else {
-      navigation.navigate("Home");
+      navigation.reset({
+        index: 0, // Define el índice de la nueva pantalla en la pila (en este caso, la primera pantalla)
+        routes: [{ name: 'HomeNavigator' }]
+      });
     }
   };
 
@@ -201,15 +210,13 @@ const Formulario = ({ route, editar = true }) => {
   }
 
   return (
-
-
     <View style={styles.container}>
       <Text style={styles.titulo}>{tituloForm}</Text>
       <ScrollView contentContainerStyle={styles.scrollViewContainer}>
         {preguntas.map((pregunta) => (
           <View key={pregunta.Id} style={styles.preguntaContainer}>
             <Text style={styles.clasePregunta}>{pregunta.Texto}</Text>
-            {/*                                                         BOTONES                                                                                */}
+            {/*------------------------------------------------------------------- BOTONES  ------------------------------------------------------------------------------*/}
             <View style={styles.claseBotonesContainer}>
               <TouchableOpacity
                 style={[

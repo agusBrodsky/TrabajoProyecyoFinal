@@ -127,5 +127,31 @@ static getLastRespuesta = async (Fecha, idUsuario) =>
         console.log(error);
     }
 }
+static update = async ( respuestas) =>{
+    let rowsAffected=0;
+    console.log('estoy en el update');
+    console.log(respuestas);/*
+    const{TextoPregunta,Opcion,Texto,IdParteCuerpo,IdForm,Orden,IdUsuario,Fecha} = respuestas;
+    try{
+    let pool = await sql.connect(config);
+    let result = await pool.request()
+    .input('pTextoPregunta',TextoPregunta)
+    .input('pOpcion',Opcion)
+    .input('pTexto',Texto)
+    .input('pIdParteCuerpo',IdParteCuerpo)
+    .input('pOrden',Orden)
+    .input('pIdUsuario',IdUsuario)
+    .input('pFecha',Fecha)
+    .query(`INSERT INTO Respuesta (UPDATE Respuesta 
+        SET IdUsuario = 2 
+        WHERE Fecha = '2023-11-07' and IdUsuario = 1 `)
+    console.log(result); 
+    rowsAffected = result.rowsAffected;
+    } catch (error){
+        console.log(error)
+    }
+    return rowsAffected;*/
+    return null;
+}
 
 }
