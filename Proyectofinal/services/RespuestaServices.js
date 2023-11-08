@@ -121,7 +121,7 @@ static getLastRespuesta = async (Fecha, idUsuario) =>
         let result = await pool.request()
         .input('pFecha',Fecha)
         .input('pIdUsuario',idUsuario)
-        .query(`SELECT * FROM Respuesta WHERE Fecha = @pFecha `)
+        .query(`SELECT * FROM Respuesta WHERE Fecha = @pFecha order by Orden`)
         return result.recordsets[0];
     }
     catch(error){
@@ -129,30 +129,27 @@ static getLastRespuesta = async (Fecha, idUsuario) =>
     }
     return "jaja invalido!!";
 }
-static update = async ( respuestas) =>{
+static update = async ( respuesta) =>{
     let rowsAffected=0;
     console.log('estoy en el update');
-    console.log(respuestas);/*
-    const{TextoPregunta,Opcion,Texto,IdParteCuerpo,IdForm,Orden,IdUsuario,Fecha} = respuestas;
+    console.log(respuesta);
+    const{TextoPregunta,Opcion,Texto,IdParteCuerpo,IdForm,Orden,IdUsuario,Fecha} = respuesta;
     try{
     let pool = await sql.connect(config);
     let result = await pool.request()
-    .input('pTextoPregunta',TextoPregunta)
     .input('pOpcion',Opcion)
     .input('pTexto',Texto)
-    .input('pIdParteCuerpo',IdParteCuerpo)
+    //.input('pIdParteCuerpo',IdParteCuerpo)
     .input('pOrden',Orden)
     .input('pIdUsuario',IdUsuario)
     .input('pFecha',Fecha)
-    .query(`INSERT INTO Respuesta (UPDATE Respuesta 
-        SET IdUsuario = 2 
-        WHERE Fecha = '2023-11-07' and IdUsuario = 1 `)
+    .query(`UPDATE Respuesta set Opcion=@pOpcion , Texto=@pTexto WHERE Orden=@pOrden and Fecha=@pFecha and IdUsuario=@pIdUsuario`)
     console.log(result); 
     rowsAffected = result.rowsAffected;
     } catch (error){
         console.log(error)
     }
-    return rowsAffected;*/
+    return rowsAffected;
     return null;
 }
 

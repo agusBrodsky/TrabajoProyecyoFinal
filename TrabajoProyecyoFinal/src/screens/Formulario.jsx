@@ -4,8 +4,8 @@ import { Text, View, StyleSheet, ScrollView, Button, TouchableOpacity } from 're
 import Input from '../components/Input';
 import axios from 'axios';
 import { format } from 'date-fns';
-
-const Formulario = ({ route, editar = false}) => {
+// FALTA HACER EL UPDATE, YA SE MUESTRAN LAS RESPUESTAS ANTIGUAS Y LOS INPUTS ANTAS PIOLA
+const Formulario = ({ route}) => {
   const navigation = useNavigation();
   const [segundaPregunta, setSegundaPregunta] = useState({}); // ARRAY RESPUESTAS
   const [preguntas, setPreguntas] = useState([]); // ARRAY DE PREGUNTAS INICIALES
@@ -18,12 +18,15 @@ const Formulario = ({ route, editar = false}) => {
   const [idUser, setUserId] = useState(null);
   const [selectedButtons, setSelectedButtons] = useState(Array(preguntas.length).fill(null));
   const [respEditar, setRespEditar] = useState(null); // arrayRespuestas para editar!!
-  useEffect(() => { // Obtener el ID del usuario desde localStorage
+  const editar = route.params.editar;
+  useEffect(() => { 
+    // Obtener el ID del usuario desde localStorage
     const storedUserId = localStorage.getItem('userId');
     if (storedUserId) {
       setUserId(storedUserId);
-      console.log(storedUserId);
+      console.log("idUsuario: "+storedUserId);
     }
+    console.log(editar);
   }, []);
   
   
@@ -43,7 +46,7 @@ const Formulario = ({ route, editar = false}) => {
     };
 
   useEffect(() => { // ESTE USE EFFECT TRAE LAS PREGUNTAS O LAS RESPUESTAS DEL FORM DEPENDE DEL CASO!!
-    if (!editar) {
+    if (editar) {
       // Lógica para cargar las respuestas del formulario
       // y actualizar el estado arrayRespuestas con esas respuestas.
       console.log("estas en edit!!");
@@ -55,6 +58,7 @@ const Formulario = ({ route, editar = false}) => {
           console.log(res.data); 
           setRespEditar(res.data);
           
+          // este codigo es para marcar los botones, actualiza el segundaPregunta en base a las respuestas del formulario antiguo. 
           const respuestasGuardadas = res.data;
           const respuestasArray = []; // Array para almacenar las respuestas cargadas desde la API.
           const botonesSeleccionadosArray = Array(preguntas.length).fill(null); // Array para los botones seleccionados.
@@ -68,7 +72,7 @@ const Formulario = ({ route, editar = false}) => {
                 ...prevPreguntas,
                 [respuesta.Orden]: true,
               }));
-              handleInputChange(respuesta.Texto,respuesta.Orden) // FALTA TERMINAR ESTO, ESTAMOS HACIENDO QUE SE EDITE UN FORMULARIO, Y TODA LA BOLA, FALTA QUE SE CARGUE EL TEXTO A LOS INPUTS  
+              handleInputChange(respuesta.Texto,respuesta.Orden)
             } else {
               respuestasArray.push(respuesta);
               botonesSeleccionadosArray[respuesta.Orden] = 'no';
@@ -131,7 +135,7 @@ const Formulario = ({ route, editar = false}) => {
       Id: null,
       TextoPregunta: texto,
       Opcion: 0,
-      Texto: valorInput !== "" ? valorInput : null,
+      Texto: valorInput !== "" ? null : null,
       IdParteCuerpo: null,
       Orden: idP,
       IdUsuario: idUser, 
@@ -155,24 +159,27 @@ const Formulario = ({ route, editar = false}) => {
     })
   }
   const updateRespuestas = ()=>{
-    axios.put('http://localhost:3000/RespuestaUpdate/', arrayRespuestas)
-    .then((res)=>{
-      console.log("listo!!");
-      console.log(res.data);
-    })
-    .catch((error)=>{
-      console.log(error);
-    })
+    arrayRespuestas.forEach((respuesta) => {
+      axios.put('http://localhost:3000/RespuestaUpdate/', respuesta)
+      .then((res)=>{
+        console.log("listo!!");
+        console.log(res.data);
+      })
+      .catch((error)=>{
+        console.log(error);
+      })
+    });
   }
-  const continuarForm = () => {
+  const continuarForm = () => { // funcion para guardar/actualizar respuestas del formulario.
     let veridicojeje = true;
     console.log("Continuar Form");
     console.log(arrayRespuestas);
-    if (editar) { // hace el update y actualiza las respuestas 
+    if (editar) {  
+      // actualizar!
       console.log("estamos en edit!!");
-      updateRespuestas();
+      updateRespuestas(); // funcion que hace el update.
     }
-    else { // agrega las respuestas a la bdd 
+    else { // agrega las respuestas a la bdd.
       arrayRespuestas.forEach((respuesta) => {
         console.log("las respuestas " +respuesta);
         axios.post('http://localhost:3000/Respuesta', respuesta)
@@ -187,7 +194,7 @@ const Formulario = ({ route, editar = false}) => {
 
       });
     }
-    if (false) { // burocracia!
+    if (false) { // burocracia!!
       setPaginaForm(2);
       setTituloForm("EVALUACIÓN NO MOTORA");
     } else {
@@ -198,10 +205,10 @@ const Formulario = ({ route, editar = false}) => {
     }
   };
 
-  const cambiarPagina = () => {
+  const cambiarPagina = () => { // burocracia!!
     navigation.navigate("Login");
   };
-  const cambiarPagina1 = () => {
+  const cambiarPagina1 = () => { // burocracia!!
     navigation.navigate("VerHistorialMedico");
   }
 
@@ -254,7 +261,8 @@ const Formulario = ({ route, editar = false}) => {
             {segundaPregunta[pregunta.Id] && (
               <View style={styles.inputContainer}>
                 {
-                (false) ? <Input id={pregunta.Id} textoArriba={pregunta.preguntaHabilitada}textoFijo="" onChange={handleInputChange} /> : <Input id={pregunta.Id} textoFijo={respEditar[pregunta.Id].Texto} onChange={handleInputChange} />
+                // chequear esto!!
+                (!editar) ? <Input id={pregunta.Id} textoArriba={pregunta.preguntaHabilitada}textoFijo="" onChange={handleInputChange} /> : <Input id={pregunta.Id} textoFijo={respEditar[pregunta.Id-1].Texto} onChange={handleInputChange} />
                 }
               </View>
             )}

@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import { format } from 'date-fns';
 import axios from 'axios';
 import traerId from '../data/traerId.jsx';
-
+import Editar from './Editar';
 
 const Home = ({ route, title = 'Error!'}) => {
   const navigation = useNavigation();
@@ -25,24 +25,21 @@ const Home = ({ route, title = 'Error!'}) => {
 
   const today = new Date();
   
-  useEffect(() => {
+  useEffect(() => { // Este useEffect hace que si ya se resolvio el formulario aparezca la opcion de editar, y en caso de que no de hacerlo con la variable setForm
     const dia1 = format(today, 'yyyy-MM-dd');
-    axios.get(`http://localhost:3000/ValidarForm/${dia1}/${idUser}`) // esta funcion chequea si ya se resolvio el formulario!
+    
+    axios.get(`http://localhost:3000/ValidarForm/${dia1}/${idUser}`) 
       .then((res) => {
-        //setForm(res.data.valido);
-        console.log(res.data.valido);
+        console.log(res.data);
         setForm(res.data.valido);
       });
-  }, []);
+  }, [idUser]);
 
   const handleFormularioPress = () => {
-    if (formHecho) {
-      console.log("Vibrationnn!!");
-      Vibration.vibrate(200);
-    } else {
-      navigation.navigate('Formulario');//,{id:idUser});
+    let editar
+    formHecho ? editar = true : editar = false;
+    navigation.navigate('Formulario',{editar});
 
-    }
   };
 
   return (
@@ -54,8 +51,8 @@ const Home = ({ route, title = 'Error!'}) => {
       {formHecho ? "" : ''}
       <TouchableOpacity
         style={[styles.button, formHecho && styles.disabledButton]}  // Aplicar estilo adicional si formHecho es true
-        onPress={formHecho ? null : handleFormularioPress}  // Si formHecho es true, onPress será null
-        disabled={formHecho}  // Desactivar el botón cuando formHecho es true
+        onPress={handleFormularioPress}  // Si formHecho es true, onPress será null
+        
       >
         <Text style={styles.buttonText}>{formHecho ? "Editar" : "Diario del día"}</Text>
       </TouchableOpacity>

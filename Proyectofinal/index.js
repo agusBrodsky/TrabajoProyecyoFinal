@@ -141,9 +141,8 @@ app.get('/ValidarForm/:dia1/:idUsuario', async (req, res) => {
     console.log("llegue a validarForm!!");
     (req.params.idUsuario) ? console.log("falta hacer el login!!") : {}
     const valido = await FormServices.validar(req.params.dia1, req.params.idUsuario);
-    console.log("valido");
+
     if (valido) {
-        
         res.status(200).send({'message': 'formulario ya hecho!', 'valido': true});
         return true;
     } else {
@@ -192,13 +191,14 @@ app.get('/getLastRespuesta/:Fecha/:idUsuario', async (req,res)=>{ // FUNCION QUE
 })
 app.put('/RespuestaUpdate', async (req,res)=>{
     console.log("estoy en backend /respuestaUpdate");
+    console.log(req.body);
     try{
         const updateHecho = await RespuestaServices.update(req.body)
-        res.status(200).send(Respuestas)
+        res.status(200).send(updateHecho)
     }
     catch(error){
-        console.log(error);
-        res.status(500).send({'message': 'error al hacer el update!'})
+        console.log("error");
+        res.status(200).send({'message': 'error al hacer el update!'})
     }
 })
 app.listen(port, () =>

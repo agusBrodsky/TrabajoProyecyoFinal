@@ -109,8 +109,6 @@ static validar = async (dia1, idUsuario) => {
     } catch (error) {
         console.log(error);
     }
-    if(rowsAffected > 0) return true; 
-    else {return false}
     return rowsAffected > 0; // Devuelve true si hay filas afectadas, es decir, si el formulario se encontró
 }
 }
