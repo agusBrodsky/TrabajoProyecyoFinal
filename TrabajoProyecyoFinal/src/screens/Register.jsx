@@ -33,7 +33,7 @@ const Register = () => {
         if (res.data.Id != 0) {
           const userId = res.data.Id;
           console.log(`Usuario registrado correctamente con ID: ${userId}`);
-          navigation.navigate('Home');//,{ userId});
+          navigation.navigate('HomeNavigator');//,{ userId});
         } else {
           console.log('Error al registrar usuario');
         }

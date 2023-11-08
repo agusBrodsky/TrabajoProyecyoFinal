@@ -119,13 +119,15 @@ static getLastRespuesta = async (Fecha, idUsuario) =>
     {
         let pool = await sql.connect(config);
         let result = await pool.request()
-        .query(`SELECT * FROM Respuesta WHERE Fecha = '2023-11-06' `);
-        console.log(result.recordsets[0]);
+        .input('pFecha',Fecha)
+        .input('pIdUsuario',idUsuario)
+        .query(`SELECT * FROM Respuesta WHERE Fecha = @pFecha `)
         return result.recordsets[0];
     }
     catch(error){
         console.log(error);
     }
+    return "jaja invalido!!";
 }
 static update = async ( respuestas) =>{
     let rowsAffected=0;

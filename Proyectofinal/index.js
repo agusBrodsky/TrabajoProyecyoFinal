@@ -181,8 +181,7 @@ app.post('/agMed', async (req, res) => {
 app.get('/getLastRespuesta/:Fecha/:idUsuario', async (req,res)=>{ // FUNCION QUE TRAE EL ULTIMO FORMULARIO EN CASO DE QUE ESTE RESUELTO!!
     console.log("llegue a getLastRespuesta");
     try{
-        //const Respuestas = await RespuestaServices.getLastRespuesta(req.params.Fecha,req.params.idUsuario)
-        const Respuestas = null;
+        const Respuestas = await RespuestaServices.getLastRespuesta(req.params.Fecha,req.params.idUser)
         res.status(200).send(Respuestas)
     }
     catch(error){

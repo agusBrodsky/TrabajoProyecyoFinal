@@ -30,6 +30,7 @@ const App = () => {
 
     <NavigationContainer fallback>
       <Stack.Navigator>
+
         <Stack.Screen
           name="HomeNavigator"
           component={HomeNavigator}
@@ -70,6 +71,7 @@ const App = () => {
         
         {/* Elimina HomeNavigator de las pantallas de Login y Register */}
         <Stack.Screen name="Register" component={Register} options={{ headerShown: true }} />
+        <Stack.Screen name="Login" component={Login} options={{ headerShown: true }} />
 
       </Stack.Navigator>
     </NavigationContainer>

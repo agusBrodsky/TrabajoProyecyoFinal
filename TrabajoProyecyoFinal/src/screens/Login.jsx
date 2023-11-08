@@ -31,7 +31,7 @@ const Login = () => {
           setUserId(id);
           localStorage.setItem('userId', id);
           // Navegar a la pantalla Home
-          navigation.navigate('Home', { id: id });
+          navigation.navigate('HomeNavigator', { id: id });
         }
       })
       .catch(error => {

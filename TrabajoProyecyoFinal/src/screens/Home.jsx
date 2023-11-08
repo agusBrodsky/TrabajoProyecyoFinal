@@ -10,28 +10,28 @@ import traerId from '../data/traerId.jsx';
 
 const Home = ({ route, title = 'Error!'}) => {
   const navigation = useNavigation();
-
   const [isButtonBlocked, setButtonBlocked] = useState(false);
-  const [formHecho, setForm] = useState(false);
-  const [id, setUserId] = useState(null);
+  const [formHecho, setForm] = useState(false); // si esta en true 
+  const [idUser, setUserId] = useState(null);
   let textoForm = "Recuerda completar el diario del día";
-
-  const today = new Date();
-
   useEffect(() => {
     // Obtener el ID del usuario desde localStorage
     const storedUserId = localStorage.getItem('userId');
     if (storedUserId) {
       setUserId(storedUserId);
+      console.log(storedUserId);
     }
   }, []);
 
+  const today = new Date();
+  
   useEffect(() => {
     const dia1 = format(today, 'yyyy-MM-dd');
-    axios.get(`http://localhost:3000/ValidarForm/${dia1}/${id}`)
+    axios.get(`http://localhost:3000/ValidarForm/${dia1}/${idUser}`) // esta funcion chequea si ya se resolvio el formulario!
       .then((res) => {
         //setForm(res.data.valido);
-        setForm(false);
+        console.log(res.data.valido);
+        setForm(res.data.valido);
       });
   }, []);
 
@@ -40,7 +40,7 @@ const Home = ({ route, title = 'Error!'}) => {
       console.log("Vibrationnn!!");
       Vibration.vibrate(200);
     } else {
-      navigation.navigate('Formulario',{id:id});
+      navigation.navigate('Formulario');//,{id:idUser});
 
     }
   };

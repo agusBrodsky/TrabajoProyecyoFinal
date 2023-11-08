@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 
-const Input = ({ id,placeholder, pass = false, onChange }) => {
+const Input = ({ id,textoArriba,textoFijo, pass = false, onChange }) => {
   const [inputValue, setInputValue] = useState('');
 
   const ocultarPass = (text) => {
@@ -11,9 +11,10 @@ const Input = ({ id,placeholder, pass = false, onChange }) => {
 
   return (
     <View style={styles.inputContainer}>
-      <Text style={styles.tamañoLetra}>{placeholder}</Text>
+      <Text style={styles.tamañoLetra}>{textoArriba}</Text>
       <TextInput
         style={styles.input}
+        placeholder={textoFijo}
         value={inputValue}
         onChangeText={ocultarPass}
         secureTextEntry={pass}
@@ -35,6 +36,7 @@ const styles = StyleSheet.create({
   },
   tamañoLetra: {
     fontSize: 15,
+    color:'black',
     fontWeight: 'bold',
     textAlign: 'left',
   },

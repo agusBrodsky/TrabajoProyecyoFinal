@@ -3,8 +3,9 @@ import { useNavigation } from '@react-navigation/native';
 import { Text, View, StyleSheet, ScrollView, Button, TouchableOpacity } from 'react-native';
 import Input from '../components/Input';
 import axios from 'axios';
+import { format } from 'date-fns';
 
-const Formulario = ({ route, editar = true }) => {
+const Formulario = ({ route, editar = false}) => {
   const navigation = useNavigation();
   const [segundaPregunta, setSegundaPregunta] = useState({}); // ARRAY RESPUESTAS
   const [preguntas, setPreguntas] = useState([]); // ARRAY DE PREGUNTAS INICIALES
@@ -16,9 +17,8 @@ const Formulario = ({ route, editar = true }) => {
   const [IdForm, setIdForm] = useState();
   const [idUser, setUserId] = useState(null);
   const [selectedButtons, setSelectedButtons] = useState(Array(preguntas.length).fill(null));
-  const [respEditar, setRespEditar] = useState(null);
-  useEffect(() => {
-    // Obtener el ID del usuario desde localStorage
+  const [respEditar, setRespEditar] = useState(null); // arrayRespuestas para editar!!
+  useEffect(() => { // Obtener el ID del usuario desde localStorage
     const storedUserId = localStorage.getItem('userId');
     if (storedUserId) {
       setUserId(storedUserId);
@@ -26,12 +26,7 @@ const Formulario = ({ route, editar = true }) => {
     }
   }, []);
   
-  const handleInputChange = (value, id_r) => {
-    console.log(value,id_r);
-    setInput(value);
-    actualizarTexto(id_r, value);
-  };
-
+  
   function actualizarTexto(id, value) {
     const actualizado = arrayRespuestas.map(resp => {
       if (resp.Orden === id) {
@@ -41,20 +36,21 @@ const Formulario = ({ route, editar = true }) => {
     });
     setArrayRespuestas(actualizado);
   }
+  const handleInputChange = (value, id_r) => {
+      console.log(value,id_r);
+      setInput(value);
+      actualizarTexto(id_r, value);
+    };
 
   useEffect(() => { // ESTE USE EFFECT TRAE LAS PREGUNTAS O LAS RESPUESTAS DEL FORM DEPENDE DEL CASO!!
-    if (editar) {
+    if (!editar) {
       // Lógica para cargar las respuestas del formulario
       // y actualizar el estado arrayRespuestas con esas respuestas.
       console.log("estas en edit!!");
+        const today = new Date();
+        const fecha = format(today, 'yyyy-MM-dd')
       
-        const fechaActual = new Date();
-        const año = fechaActual.getFullYear();
-        const mes = fechaActual.getMonth() + 1;
-        const dia = fechaActual.getDate();
-        const fechaFormateada = `${año}-${mes < 10 ? '0' : ''}${mes}-${dia < 10 ? '0' : ''}${dia}`;
-
-      axios.get('http://localhost:3000/getLastRespuesta/${Fecha}/${idUser}')
+        axios.get(`http://localhost:3000/getLastRespuesta/${fecha}/${idUser}`) // FUNCION QUE TRAE EL ULTIMO FORMULARIO (las respuestas) EN CASO DE QUE ESTE RESUELTO!!
         .then((res) => {
           console.log(res.data); 
           setRespEditar(res.data);
@@ -93,7 +89,7 @@ const Formulario = ({ route, editar = true }) => {
 
     }
     else {
-
+    
     }
     axios.get('http://localhost:3000/Pregunta')
       .then((res) => {
@@ -257,7 +253,9 @@ const Formulario = ({ route, editar = true }) => {
 
             {segundaPregunta[pregunta.Id] && (
               <View style={styles.inputContainer}>
-                <Input id={pregunta.Id} placeholder={pregunta.preguntaHabilitada} onChange={handleInputChange} />
+                {
+                (false) ? <Input id={pregunta.Id} textoArriba={pregunta.preguntaHabilitada}textoFijo="" onChange={handleInputChange} /> : <Input id={pregunta.Id} textoFijo={respEditar[pregunta.Id].Texto} onChange={handleInputChange} />
+                }
               </View>
             )}
           </View>
