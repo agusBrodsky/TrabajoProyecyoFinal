@@ -67,7 +67,7 @@ static insert = async (Respuesta) =>
     }
     return rowsAffected;
 }
-static getById = async (Dia1,Dia2,id)  =>{ 
+static getById = async (Dia1,Dia2,id,idUser)  =>{ 
     let returnEntity = null;
     console.log("estoyy en respuesta/getById")
     try{
@@ -76,7 +76,8 @@ static getById = async (Dia1,Dia2,id)  =>{
         .input('pOrden',sql.Int,id)
         .input("pFecha1",sql.Date,Dia1)
         .input ("pFecha2",sql.Date,Dia2)
-        .query(`SELECT * FROM Respuesta WHERE Orden = @pOrden AND Opcion = 1 AND Respuesta.Fecha BETWEEN @pFecha1 AND @pFecha2`);
+        .input("pIdUsuario",sql.Int,idUser)
+        .query(`SELECT * FROM Respuesta WHERE IdUsuario = @pIdUsuario AND Orden = @pOrden AND Opcion = 1 AND Respuesta.Fecha BETWEEN @pFecha1 AND @pFecha2`);
         returnEntity = result.recordsets[0];
     }
     catch(error){
@@ -150,7 +151,6 @@ static update = async ( respuesta) =>{
         console.log(error)
     }
     return rowsAffected;
-    return null;
 }
 
 }

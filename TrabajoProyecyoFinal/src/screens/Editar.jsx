@@ -11,9 +11,6 @@ export default function Editar() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.navBar}>
-        <Text style={styles.titulo}>EDITAR</Text>
-      </View>
       <Image
         source={require('../../assets/logo.png')}
         style={styles.logo}

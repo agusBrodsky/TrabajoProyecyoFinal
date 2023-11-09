@@ -47,8 +47,6 @@ const Formulario = ({ route}) => {
 
   useEffect(() => { // ESTE USE EFFECT TRAE LAS PREGUNTAS O LAS RESPUESTAS DEL FORM DEPENDE DEL CASO!!
     if (editar) {
-      // Lógica para cargar las respuestas del formulario
-      // y actualizar el estado arrayRespuestas con esas respuestas.
       console.log("estas en edit!!");
         const today = new Date();
         const fecha = format(today, 'yyyy-MM-dd')
@@ -154,7 +152,7 @@ const Formulario = ({ route}) => {
       });
     })
     let idRespuestaRepetida = null;
-    arrayRespuestas.map((objeto) => { // objeto es la respuesta en cada ciclo!
+    arrayRespuestas.map((objeto) => { // objeto respuesta en cada ciclo!
 
     })
   }

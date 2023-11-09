@@ -12,7 +12,7 @@ import { es } from 'date-fns/locale'; // Importa el objeto "es" para traduccione
 import { startOfMonth, endOfMonth } from 'date-fns';
 
 
-const VerHistorialMedico = () => {
+const VerHistorialMedico = ({route}) => {
   const [preguntas, setPreguntas] = useState([]);
   const [respuesta, setRespuesta] = useState([]);
   const [cantidadPorOrden, setCantidadPorOrden] = useState({});
@@ -26,6 +26,17 @@ const VerHistorialMedico = () => {
   const [newRespuesta, setNewRespuesta] = useState([{}]);
   const [firstLoading, setFirstLoading] = useState(false);
   //const [preguntaModal, setPreguntaModal] = useState();
+  const [idUser, setUserId] = useState(null);
+
+  useEffect(() => { 
+    // Obtener el ID del usuario desde localStorage
+    const storedUserId = localStorage.getItem('userId');
+    if (storedUserId) {
+      setUserId(storedUserId);
+      console.log("idUsuario: "+storedUserId);
+    }
+  }, []);
+
   const meses = [
     { nro: 0, nombre: 'Enero' },
     { nro: 1, nombre: 'Febrero' },
@@ -115,7 +126,7 @@ const VerHistorialMedico = () => {
     const dia1 = format(primerDia, 'yyyy-MM-dd');
     const dia2 = format(ultimoDia, 'yyyy-MM-dd'); 
     console.log("Entre a la funcion handleButton");
-    axios.get(`http://localhost:3000/Respuesta/${dia1}/${dia2}/${idPregunta}`)
+    axios.get(`http://localhost:3000/Respuesta/${dia1}/${dia2}/${idPregunta}/${idUser}`)
       .then((res) => {
         console.log(res.data);
         setRespuestaEspecifica(res.data);

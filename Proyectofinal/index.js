@@ -84,9 +84,9 @@ app.get('/Fecha/:Dia1/:Dia2/:IdUsuario',async(req,res)=>{
     console.log(Respuesta);
     res.status(200).send(Respuesta)
 })
-app.get('/Respuesta/:Dia1/:Dia2/:idPregunta',async(req,res)=>{
+app.get('/Respuesta/:Dia1/:Dia2/:idPregunta/:idUser',async(req,res)=>{
     console.log(req.params);
-    const Respuesta = await RespuestaServices.getById(req.params.Dia1,req.params.Dia2,req.params.idPregunta)
+    const Respuesta = await RespuestaServices.getById(req.params.Dia1,req.params.Dia2,req.params.idPregunta,req.params.idUser)
     res.status(200).send(Respuesta)
 })
 

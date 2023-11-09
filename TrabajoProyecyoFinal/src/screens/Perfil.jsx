@@ -9,7 +9,7 @@ export default function Perfil() {
     navigation.navigate('VerHistorialMedico'); 
   };
   const goToEditar = () => {
-    navigation.navigate('Editar'); // Navega a la pantalla "Editar"
+    navigation.navigate('Editar'); // Editar Perfil!
   };
 
   return (

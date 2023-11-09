@@ -23,7 +23,7 @@ npm install @react-navigation/stack
 const Stack = createStackNavigator();
 
 const handleBackPress = () => {
-  console.log("Volvimos para aca")
+  //navigation.goBack();
 }
 const App = () => {
   return (
@@ -58,7 +58,9 @@ const App = () => {
           name="Perfil"
           component={Perfil}
           options={{
-            header: ({ navigation }) => <NavBar navigation={navigation} title="Perfil" />,
+            header: ({ navigation }) => (
+              <NavBar title="Perfil" onBackPress={handleBackPress} />
+            ),
           }}
         />
         <Stack.Screen
@@ -70,8 +72,8 @@ const App = () => {
         />
         
         {/* Elimina HomeNavigator de las pantallas de Login y Register */}
-        <Stack.Screen name="Register" component={Register} options={{ headerShown: true }} />
         <Stack.Screen name="Login" component={Login} options={{ headerShown: true }} />
+        <Stack.Screen name="Register" component={Register} options={{ headerShown: true }} />
 
       </Stack.Navigator>
     </NavigationContainer>

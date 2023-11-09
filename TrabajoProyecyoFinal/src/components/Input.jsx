@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 
-const Input = ({ id,textoArriba,textoFijo='', pass = false, onChange }) => {
+const Input = ({ id,textoArriba,placeholder=null,textoFijo='', pass = false, onChange }) => {
   const [inputValue, setInputValue] = useState(textoFijo);
 
   const ocultarPass = (text) => {
@@ -17,6 +17,7 @@ const Input = ({ id,textoArriba,textoFijo='', pass = false, onChange }) => {
         value={inputValue}
         onChangeText={ocultarPass}
         secureTextEntry={pass}
+        placeholder={placeholder}
       />
     </View>
   );
