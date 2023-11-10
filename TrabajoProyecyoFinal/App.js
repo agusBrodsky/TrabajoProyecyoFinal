@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -25,12 +26,24 @@ const Stack = createStackNavigator();
 const handleBackPress = () => {
   //navigation.goBack();
 }
-const App = () => {
+const App = ({route}) => {
+  const [idUser, setUserId] = useState(null);
+
+  useEffect(() => {
+    // Obtener el ID del usuario desde localStorage
+    const storedUserId = localStorage.getItem('userId');
+    if (storedUserId != null) {
+      setUserId(storedUserId);
+      console.log(storedUserId);
+    }
+  }, []);
+
   return (
 
     <NavigationContainer fallback>
       <Stack.Navigator>
-
+      {(idUser > -1 ) ?   console.log("usuario ya registrado!")
+        : <Stack.Screen name="Login" component={Login} options={{ headerShown: true }} /> }
         <Stack.Screen
           name="HomeNavigator"
           component={HomeNavigator}
@@ -72,7 +85,6 @@ const App = () => {
         />
         
         {/* Elimina HomeNavigator de las pantallas de Login y Register */}
-        <Stack.Screen name="Login" component={Login} options={{ headerShown: true }} />
         <Stack.Screen name="Register" component={Register} options={{ headerShown: true }} />
 
       </Stack.Navigator>
