@@ -42,8 +42,7 @@ const App = ({route}) => {
 
     <NavigationContainer fallback>
       <Stack.Navigator>
-      {(idUser > -1 ) ?   console.log("usuario ya registrado!")
-        : <Stack.Screen name="Login" component={Login} options={{ headerShown: true }} /> }
+        
         <Stack.Screen
           name="HomeNavigator"
           component={HomeNavigator}
@@ -51,6 +50,7 @@ const App = ({route}) => {
             header: ({ navigation }) => <NavBar title="Home" onBackPress={handleBackPress} />,
           }}
         />
+      
       <Stack.Screen
           name="Home"
           component={Home}
@@ -86,6 +86,7 @@ const App = ({route}) => {
         
         {/* Elimina HomeNavigator de las pantallas de Login y Register */}
         <Stack.Screen name="Register" component={Register} options={{ headerShown: true }} />
+      <Stack.Screen name="Login" component={Login} options={{ headerShown: true }} /> 
 
       </Stack.Navigator>
     </NavigationContainer>

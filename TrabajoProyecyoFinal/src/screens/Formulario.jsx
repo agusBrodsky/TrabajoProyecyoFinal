@@ -50,12 +50,11 @@ const Formulario = ({ route}) => {
       console.log("estas en edit!!");
         const today = new Date();
         const fecha = format(today, 'yyyy-MM-dd')
-      
         axios.get(`http://localhost:3000/getLastRespuesta/${fecha}/${idUser}`) // FUNCION QUE TRAE EL ULTIMO FORMULARIO (las respuestas) EN CASO DE QUE ESTE RESUELTO!!
         .then((res) => {
           console.log(res.data); 
           setRespEditar(res.data);
-          
+          console.log(idUser);
           // este codigo es para marcar los botones, actualiza el segundaPregunta en base a las respuestas del formulario antiguo. 
           const respuestasGuardadas = res.data;
           const respuestasArray = []; // Array para almacenar las respuestas cargadas desde la API.
@@ -99,7 +98,7 @@ const Formulario = ({ route}) => {
         const arrayPreguntas = res.data;
         setPreguntas(arrayPreguntas);
       });
-  }, []);
+  }, [idUser]);
 
   const onPressSi = (idP, texto) => {
     setSegundaPregunta((prevPreguntas) => ({
@@ -212,7 +211,7 @@ const Formulario = ({ route}) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.titulo}>{tituloForm}</Text>
+      <Text style={styles.titulo}>{tituloForm} </Text>
       <ScrollView contentContainerStyle={styles.scrollViewContainer}>
         {preguntas.map((pregunta) => (
           <View key={pregunta.Id} style={styles.preguntaContainer}>

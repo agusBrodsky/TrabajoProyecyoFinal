@@ -122,7 +122,7 @@ static getLastRespuesta = async (Fecha, idUsuario) =>
         let result = await pool.request()
         .input('pFecha',Fecha)
         .input('pIdUsuario',idUsuario)
-        .query(`SELECT * FROM Respuesta WHERE Fecha = @pFecha order by Orden`)
+        .query(`SELECT * FROM Respuesta WHERE Fecha = @pFecha and IdUsuario = @pIdUsuario order by Orden`)
         return result.recordsets[0];
     }
     catch(error){

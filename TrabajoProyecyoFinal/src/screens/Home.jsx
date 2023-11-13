@@ -44,7 +44,7 @@ const Home = ({ route, title = 'Error!'}) => {
 
   return (
     <View style={styles.container}>
-      
+      <>
       <Text style={styles.reminderText}>
         {formHecho ? "Formulario de hoy completado!" : "Recuerda completar el diario del día"}
       </Text>
@@ -54,8 +54,10 @@ const Home = ({ route, title = 'Error!'}) => {
         onPress={handleFormularioPress}  // Si formHecho es true, onPress será null
         
       >
+       
         <Text style={styles.buttonText}>{formHecho ? "Editar" : "Diario del día"}</Text>
       </TouchableOpacity>
+       </>
       <Text style={styles.recordatorio}>Recuerda tomar tu medicación en</Text>
       {/* Círculo izquierdo */}
       <View style={[styles.circleContainer, styles.circleLeft]}>
@@ -80,9 +82,9 @@ const Home = ({ route, title = 'Error!'}) => {
       </View>
 
       <View style={styles.divider} />
-
+      <>
       <Text style={styles.textBelowDivider}>A continuación</Text>
-
+      </>
       <View style={styles.symptomsContainer}>
         <Text style={styles.symptomsText}>Posibles síntomas</Text>
       </View> 
@@ -92,7 +94,7 @@ const Home = ({ route, title = 'Error!'}) => {
       <Text style={styles.symptomsList}>• Rigidez muscular</Text>
       <Text style={styles.symptomsList}>• Akinesia</Text>
       <Text style={styles.symptomsList}>• Alteración postural</Text>
-
+      
       <Text style={styles.NoMotorClass}>No Motores</Text>
         
       <View style={styles.symptomsContainerNO}>
@@ -101,6 +103,7 @@ const Home = ({ route, title = 'Error!'}) => {
         <Text style={styles.symptomsNo}>• Ansiedad</Text>
         <Text style={styles.symptomsNo}>• Depresión</Text>
       </View> 
+      
     </View>
   );
 };
